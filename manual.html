@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2학년 진로연계 탐구 설계기 v1 사용 매뉴얼</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a3a5c;
+    --navy-mid: #235080;
+    --teal: #2ab5a0;
+    --teal-light: #5dd3c0;
+    --gold: #f5c842;
+    --coral: #ff6b6b;
+    --lavender: #9b8fe8;
+    --sky: #4db8e8;
+    --emerald: #22c55e;
+    --bg: #f0f6fb;
+    --card: #ffffff;
+    --text: #1a2540;
+    --muted: #6b7a99;
+    --border: #dde3f0;
+    --step1: #4db8e8;
+    --step2: #9b8fe8;
+    --step3: #2ab5a0;
+    --step4: #f5c842;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #1a3a5c 0%, #235080 60%, #1d4472 100%);
+    color: white;
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(42,181,160,0.22) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute; bottom: -60px; left: 5%;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(245,200,66,0.13) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 12px; color: var(--teal-light);
+    letter-spacing: 0.05em; margin-bottom: 20px; font-weight: 500;
+  }
+  .version-tag {
+    display: inline-block;
+    background: var(--teal); color: white;
+    border-radius: 8px; padding: 2px 10px;
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.06em; margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700; line-height: 1.3; margin-bottom: 10px;
+  }
+  .cover h1 em { color: var(--teal-light); font-style: normal; }
+  .cover p { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: 30px; }
+  .cover-chips {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  }
+  .cover-chip {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: rgba(255,255,255,0.8);
+  }
+
+  /* ── TOC ── */
+  .toc { max-width: 780px; margin: 36px auto 0; padding: 0 20px; }
+  .toc-title { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 14px; text-transform: uppercase; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .toc-item {
+    background: white; border-radius: 12px;
+    border: 1.5px solid var(--border); padding: 12px 16px;
+    text-decoration: none; color: var(--text);
+    transition: all .18s; display: flex; align-items: center; gap: 10px;
+  }
+  .toc-item:hover {
+    border-color: var(--teal);
+    box-shadow: 0 4px 14px rgba(42,181,160,0.12);
+    transform: translateY(-1px);
+  }
+  .toc-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900; flex-shrink: 0;
+  }
+  .toc-label { font-size: 13px; font-weight: 500; line-height: 1.3; }
+
+  /* ── Content ── */
+  .content { max-width: 780px; margin: 0 auto; padding: 36px 20px 80px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 60px; }
+  .section-anchor { position: relative; top: -20px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px; padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; flex-shrink: 0;
+  }
+  .section-title h2 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .section-title p { font-size: 13px; color: var(--muted); }
+
+  /* ── Card ── */
+  .card {
+    background: white; border-radius: 16px;
+    border: 1.5px solid var(--border);
+    padding: 22px 24px; margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 14px; font-weight: 700; color: var(--navy);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+  /* ── Step Flow ── */
+  .step-flow { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 30px; }
+  .step-box {
+    background: white; border-radius: 14px;
+    border: 2px solid var(--border); padding: 16px 14px;
+    text-align: center; position: relative; transition: all .18s;
+  }
+  .step-box:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.07); }
+  .step-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+  .step-num-label { font-size: 10px; font-weight: 900; letter-spacing: 0.06em; margin-bottom: 4px; text-transform: uppercase; }
+  .step-name { font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .step-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  /* ── Step Detail ── */
+  .step-detail {
+    background: white; border-radius: 16px;
+    border: 2px solid var(--border); overflow: hidden; margin-bottom: 20px;
+  }
+  .step-detail-header {
+    padding: 16px 22px; display: flex; align-items: center; gap: 12px;
+  }
+  .step-detail-badge {
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 11px; font-weight: 900; letter-spacing: 0.04em;
+  }
+  .step-detail-title { font-size: 16px; font-weight: 700; }
+  .step-detail-body { padding: 0 22px 18px; }
+  .step-detail-desc { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+
+  /* ── Input Items ── */
+  .input-list { display: flex; flex-direction: column; gap: 8px; }
+  .input-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--bg); border-radius: 10px; padding: 10px 14px; font-size: 13px;
+  }
+  .input-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .input-item-label { font-weight: 700; color: var(--navy); }
+  .input-item-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── Req/Opt Badge ── */
+  .req-badge { font-size: 10px; font-weight: 700; color: white; background: var(--coral); border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+  .opt-badge { font-size: 10px; font-weight: 700; color: var(--muted); background: #eef0f6; border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+
+  /* ── Example Box ── */
+  .example-box {
+    background: #f8faff; border: 1.5px dashed var(--border);
+    border-radius: 12px; padding: 14px 16px; margin: 10px 0;
+  }
+  .example-label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .example-bad {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff1f2; border-radius: 8px; padding: 8px 12px;
+    margin-bottom: 6px; font-size: 12px; color: #9f1239;
+  }
+  .example-good {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #f0fdf9; border-radius: 8px; padding: 8px 12px;
+    font-size: 12px; color: #065f46;
+  }
+  .example-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Tip / Warn / Info / Emerald Box ── */
+  .tip-box {
+    background: #fffbeb; border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0; padding: 12px 16px;
+    font-size: 13px; color: #78350f; margin: 12px 0; line-height: 1.6;
+  }
+  .warn-box {
+    background: #fff1f2; border-left: 4px solid var(--coral);
+    border-radius: 0 10px 10px 0; padding: 12px 16px;
+    font-size: 13px; color: #9f1239; margin: 12px 0; line-height: 1.6;
+  }
+  .info-box {
+    background: #f0fdf9; border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0; padding: 12px 16px;
+    font-size: 13px; color: #065f46; margin: 12px 0; line-height: 1.6;
+  }
+  .emerald-box {
+    background: rgba(34,197,94,0.08); border-left: 4px solid var(--emerald);
+    border-radius: 0 10px 10px 0; padding: 12px 16px;
+    font-size: 13px; color: #166534; margin: 12px 0; line-height: 1.6;
+  }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; }
+  .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; flex-shrink: 0; margin-top: 2px;
+  }
+  .check-ok { background: #dcfce7; color: #15803d; }
+  .check-info { background: #e0f2fe; color: #075985; }
+
+  /* ── Prompt Cards ── */
+  .prompt-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+  .prompt-card-mini {
+    border-radius: 14px; padding: 16px 18px; border: 1.5px solid;
+  }
+  .prompt-card-mini .p-num { font-size: 11px; font-weight: 900; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .prompt-card-mini .p-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .prompt-card-mini .p-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .prompt-card-mini .p-what {
+    font-size: 12px; font-weight: 700; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* ── Score Table ── */
+  .score-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+  .score-table th { background: var(--navy); color: white; padding: 7px 10px; font-weight: 700; text-align: left; }
+  .score-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+  .score-table tr:last-child td { border-bottom: none; }
+  .score-table tr:nth-child(even) td { background: var(--bg); }
+
+  /* ── Plan Items (12항목) ── */
+  .plan-list { display: flex; flex-direction: column; gap: 8px; }
+  .plan-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--bg); border-radius: 10px; padding: 10px 14px; font-size: 13px;
+  }
+
+  /* ── num-list ── */
+  .num-list { counter-reset: item; list-style: none; }
+  .num-list li {
+    counter-increment: item; display: flex; gap: 12px;
+    font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); align-items: flex-start;
+  }
+  .num-list li:last-child { border-bottom: none; }
+  .num-list li::before {
+    content: counter(item);
+    background: var(--navy); color: white; border-radius: 50%;
+    width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── Flow Steps (10단계) ── */
+  .flow-steps { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; }
+  .flow-step {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--bg); border-radius: 10px; padding: 8px 12px; font-size: 12px;
+  }
+  .flow-step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--navy); color: white;
+    font-size: 10px; font-weight: 900; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .flow-step-text { color: var(--text); line-height: 1.5; }
+  .flow-step-text strong { color: var(--navy); }
+
+  /* ── Q&A ── */
+  .qa-list { display: flex; flex-direction: column; gap: 12px; }
+  .qa-item { background: white; border-radius: 12px; border: 1.5px solid var(--border); overflow: hidden; }
+  .qa-q {
+    padding: 14px 18px; font-size: 14px; font-weight: 700;
+    display: flex; gap: 10px; align-items: flex-start;
+    cursor: pointer; user-select: none;
+  }
+  .qa-q-badge {
+    background: var(--navy); color: white; border-radius: 6px;
+    padding: 1px 8px; font-size: 11px; font-weight: 900;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .qa-a { padding: 0 18px 14px 44px; font-size: 13px; color: var(--muted); line-height: 1.7; display: none; }
+  .qa-item.open .qa-a { display: block; }
+  .qa-item.open .qa-q { color: var(--teal); }
+  .qa-arrow { margin-left: auto; font-size: 12px; transition: transform .2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+
+  code {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--navy);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    background: var(--navy); color: rgba(255,255,255,0.6);
+    text-align: center; padding: 30px 20px; font-size: 12px; line-height: 1.8;
+  }
+  .footer strong { color: var(--teal-light); }
+
+  /* ── Print ── */
+  @media print {
+    .cover { padding: 30px 20px !important; }
+    .toc { margin-top: 20px !important; }
+    .section { page-break-inside: avoid; }
+    .qa-a { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="version-tag">v1</div>
+    <div class="cover-badge">🌱 2학년 진로연계 탐구 설계 프로그램 사용 매뉴얼</div>
+    <h1>학생부 기반<br><em>2학년 진로연계 탐구 설계기</em></h1>
+    <p>1학년 기록 → AI 협업 → 2학년 탐구계획 확정 → 3학년 확장 방향</p>
+    <div class="cover-chips">
+      <span class="cover-chip">📄 설치 불필요</span>
+      <span class="cover-chip">🤖 AI 연동</span>
+      <span class="cover-chip">📋 탐구계획서 자동 생성</span>
+      <span class="cover-chip">🔗 1→2→3학년 연결</span>
+      <span class="cover-chip">📖 독서 연계 지원</span>
+    </div>
+
+    <a href="index.html"
+       style="display:inline-block;margin-top:18px;padding:10px 18px;border-radius:22px;
+              background:#2ab5a0;color:white;text-decoration:none;
+              font-size:13px;font-weight:800;">
+      🚀 프로그램 바로 열기
+    </a>
+  </div>
+</div>
+
+<!-- ══ TOC ══ -->
+<div class="toc">
+  <div class="toc-title">목차 — 클릭하면 이동해요</div>
+  <div class="toc-grid">
+    <a href="#sec1" class="toc-item">
+      <div class="toc-num" style="background:#e0f2fe;color:#0369a1;">0</div>
+      <div class="toc-label">시작 전 준비</div>
+    </a>
+    <a href="#sec2" class="toc-item">
+      <div class="toc-num" style="background:rgba(77,184,232,0.15);color:var(--step1);">1</div>
+      <div class="toc-label">학생부 기록 정리</div>
+    </a>
+    <a href="#sec3" class="toc-item">
+      <div class="toc-num" style="background:rgba(155,143,232,0.15);color:var(--step2);">2</div>
+      <div class="toc-label">탐구 흐름 분석</div>
+    </a>
+    <a href="#sec4" class="toc-item">
+      <div class="toc-num" style="background:rgba(42,181,160,0.15);color:var(--step3);">3</div>
+      <div class="toc-label">AI 프롬프트 생성</div>
+    </a>
+    <a href="#sec5" class="toc-item">
+      <div class="toc-num" style="background:rgba(245,200,66,0.2);color:#92610a;">4</div>
+      <div class="toc-label">주제 확정 &amp; 계획서</div>
+    </a>
+    <a href="#sec6" class="toc-item">
+      <div class="toc-num" style="background:#fff1f2;color:#9f1239;">5</div>
+      <div class="toc-label">저장 · 출력</div>
+    </a>
+    <a href="#sec7" class="toc-item">
+      <div class="toc-num" style="background:#f1f5f9;color:#334155;">Q</div>
+      <div class="toc-label">자주 묻는 질문</div>
+    </a>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── 0. 전체 흐름 ── -->
+  <div class="section" style="margin-top:40px;">
+    <div class="section-header">
+      <div class="section-num" style="background:#e0f2fe;color:#0369a1;">🗺</div>
+      <div class="section-title">
+        <h2>전체 흐름 한눈에 보기</h2>
+        <p>4단계를 순서대로 따라가면 탐구계획서 완성!</p>
+      </div>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-box" style="border-color:var(--step1);">
+        <span class="step-icon">📄</span>
+        <div class="step-num-label" style="color:var(--step1);">1단계</div>
+        <div class="step-name">학생부 기록 정리</div>
+        <div class="step-sub">탐구 씨앗 찾기</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--step1);"></div></div>
+      </div>
+      <div class="step-box" style="border-color:var(--step2);">
+        <span class="step-icon">🔍</span>
+        <div class="step-num-label" style="color:var(--step2);">2단계</div>
+        <div class="step-name">탐구 흐름 분석</div>
+        <div class="step-sub">2학년 연결고리 찾기</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--step2);"></div></div>
+      </div>
+      <div class="step-box" style="border-color:var(--step3);">
+        <span class="step-icon">🤖</span>
+        <div class="step-num-label" style="color:var(--step3);">3단계</div>
+        <div class="step-name">AI 프롬프트 생성</div>
+        <div class="step-sub">복사 → AI에 붙여넣기</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--step3);"></div></div>
+      </div>
+      <div class="step-box" style="border-color:var(--step4);">
+        <span class="step-icon">✅</span>
+        <div class="step-num-label" style="color:#92610a;">4단계</div>
+        <div class="step-name">주제 확정</div>
+        <div class="step-sub">탐구계획서 완성</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--step4);"></div></div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      💡 <strong>1→2→3→4 순서대로 진행하세요.</strong> 이전 단계로 돌아가서 수정하는 것도 언제든 가능합니다.
+    </div>
+  </div>
+
+  <!-- ── 1. 시작 전 준비 ── -->
+  <div class="section">
+    <div id="sec1" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:#e0f2fe;color:#0369a1;">1</div>
+      <div class="section-title">
+        <h2>시작 전에 이것만 준비하세요</h2>
+        <p>앱을 열기 전 30초 체크리스트</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>필요한 것</div>
+      <ul class="checklist">
+        <li>
+          <div class="check-icon check-info">📄</div>
+          <div>
+            <div><strong>1학년 학교생활기록부</strong> (나이스 학생서비스에서 출력하거나 기억을 떠올려도 OK)</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">통째로 복사할 필요 없어요. 기억나는 활동·키워드를 머릿속에서 정리해도 충분합니다.</div>
+          </div>
+        </li>
+        <li>
+          <div class="check-icon check-info">📚</div>
+          <div>
+            <div><strong>2학년 수강 과목 목록</strong></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">어떤 과목 개념이 탐구 주제와 연결될지 생각해볼 거예요.</div>
+          </div>
+        </li>
+        <li>
+          <div class="check-icon check-info">🧭</div>
+          <div>
+            <div><strong>희망 진로·관심 학과 (있으면 좋음)</strong></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">없어도 괜찮아요. 있으면 탐구 주제와 연결할 때 더 맞춤형 결과가 나옵니다.</div>
+          </div>
+        </li>
+        <li>
+          <div class="check-icon check-ok">💻</div>
+          <div>
+            <div><strong>인터넷이 되는 기기 (PC·태블릿·스마트폰 모두 가능)</strong></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;">앱을 설치하거나 가입하지 않아도 됩니다. 브라우저에서 HTML 파일을 열기만 하면 돼요.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--gold);"></div>앱 열면 가장 먼저 — 학생 정보 입력</div>
+      <div style="font-size:14px;margin-bottom:12px;">상단 바에 있는 3가지 칸을 채워주세요.</div>
+      <div class="input-list">
+        <div class="input-item">
+          <span class="input-item-icon">🔢</span>
+          <div><div class="input-item-label">학번</div><div class="input-item-desc">예) 20101 → 2학년 1반 1번</div></div>
+        </div>
+        <div class="input-item">
+          <span class="input-item-icon">✏️</span>
+          <div><div class="input-item-label">이름</div><div class="input-item-desc">실명 입력</div></div>
+        </div>
+        <div class="input-item">
+          <span class="input-item-icon">📅</span>
+          <div><div class="input-item-label">작성일</div><div class="input-item-desc">오늘 날짜가 자동으로 들어가요.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. 1단계: 학생부 기록 정리 ── -->
+  <div class="section">
+    <div id="sec2" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(77,184,232,0.15);color:var(--step1);">2</div>
+      <div class="section-title">
+        <h2>1단계 — 학생부 기록 정리</h2>
+        <p>1학년 기록과 2학년 현재 관심사에서 탐구 씨앗 찾기</p>
+      </div>
+    </div>
+
+    <div class="step-detail" style="border-color:var(--step1);">
+      <div class="step-detail-header" style="background:rgba(77,184,232,0.08);">
+        <div class="step-detail-badge" style="background:var(--step1);color:white;">1단계</div>
+        <div class="step-detail-title">학생부 기록 정리</div>
+      </div>
+      <div class="step-detail-body">
+        <div class="step-detail-desc">
+          1학년 생기부를 다시 읽고, 2학년 탐구로 이어질 만한 내용을 짧게 정리하는 단계예요.<br>
+          전체 문장을 통째로 복사하는 게 아니라 <strong>핵심만 내 말로 요약</strong>하는 게 포인트!
+        </div>
+
+        <div class="warn-box">
+          ⚠️ <strong>입력 원칙</strong><br>
+          생기부 문장을 전체 복사·붙여넣기하지 마세요. <strong>핵심 활동·키워드·배운 점 중심으로 요약</strong>해 입력하세요.<br>
+          이름·학번·학교명 등 개인정보는 이 앱에서 저장되지 않습니다.
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--step1);"></div>A. 1학년 핵심 기록</div>
+        <div class="input-list" style="margin-bottom:16px;">
+          <div class="input-item">
+            <span class="input-item-icon">📗</span>
+            <div>
+              <div class="input-item-label">과목별 세특 <span class="req-badge">필수</span></div>
+              <div class="input-item-desc">탐구했던 내용, 관심 가진 개념을 키워드 중심으로 요약 (예: 생명과학 — 유전자 발현 조절 탐구 → 후성유전학에 관심)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🎭</span>
+            <div>
+              <div class="input-item-label">창체 (자율·동아리·진로·봉사)</div>
+              <div class="input-item-desc">의미 있었던 활동을 1~2줄로 (예: 환경 동아리 — 학교 분리배출 캠페인 기획·운영)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">💬</span>
+            <div>
+              <div class="input-item-label">행동특성·종합의견</div>
+              <div class="input-item-desc">선생님이 적어준 내 특성 (예: 논리적 분석력이 뛰어나고 팀 활동에서 문제 해결 역할을 맡음)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--teal);"></div>B. 2학년 현재 관심사 &amp; 수업 경험</div>
+        <div class="input-list" style="margin-bottom:16px;">
+          <div class="input-item">
+            <span class="input-item-icon">📘</span>
+            <div>
+              <div class="input-item-label">현재 수업(2학년 과목)에서 관심이 생긴 내용 <span class="req-badge">필수</span></div>
+              <div class="input-item-desc">예) 화학에서 산화·환원 배우며 배터리 원리에 관심 / 경제에서 최저임금 토론 후 청소년 노동 문제에 관심</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">📖</span>
+            <div>
+              <div class="input-item-label">최근 읽은 책·기사·영상 중 탐구 아이디어를 준 것</div>
+              <div class="input-item-desc">예) 『총균쇠』를 읽고 환경과 문명 발전의 관계에 관심 / 유튜브에서 AI 의료 진단 영상을 보고 의공학에 관심</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🌱</span>
+            <div>
+              <div class="input-item-label">현재 동아리·창체에서 더 탐구하고 싶은 것</div>
+              <div class="input-item-desc">예) 과학 동아리에서 식물 성장 실험을 하다가 빛 파장과 광합성 효율의 관계를 더 깊이 알고 싶어짐</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--gold);"></div>C. 탐구 씨앗 — 반복·아쉬움·다시 이어가기</div>
+        <div class="input-list">
+          <div class="input-item">
+            <span class="input-item-icon">🔁</span>
+            <div>
+              <div class="input-item-label">1학년 기록과 현재 관심사에서 반복되는 키워드 <span class="req-badge">필수</span></div>
+              <div class="input-item-desc">계속 반복되어 등장하는 주제·개념이 탐구의 씨앗입니다 (예: 환경·기후 변화, 유전자·생명공학, AI·기술 윤리)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">😔</span>
+            <div>
+              <div class="input-item-label">1학년에서 더 깊이 탐구하지 못해 아쉬웠던 활동</div>
+              <div class="input-item-desc">예) 캠페인 수준에서 끝났지만 실제 정책 분석까지 해보고 싶었음</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">💬</span>
+            <div>
+              <div class="input-item-label">2학년 탐구로 다시 이어가고 싶은 생기부 문장·표현</div>
+              <div class="input-item-desc">예) '기후 데이터와 질병 발생률의 상관관계에 관심을 보임'</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">❓</span>
+            <div>
+              <div class="input-item-label">지금 가장 궁금한 질문 (탐구 주제가 될 수 있는 질문)</div>
+              <div class="input-item-desc">지금 풀고 싶은 질문이 탐구의 출발점입니다. 완성된 질문이 아니어도 됩니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-box" style="margin-top:14px;">
+          <div class="example-label">✏️ 입력 예시 — 이렇게 써보세요!</div>
+          <div class="example-bad"><span class="example-icon">✗</span><div><strong>나쁜 예 (너무 길어요)</strong><br>"생명과학에서 유전자 발현 조절에 관한 단원을 학습하면서 생명현상의 정밀성과 복잡성에 깊은 관심을 갖게 되었으며 특히 후성유전학적 변화가..."</div></div>
+          <div class="example-good"><span class="example-icon">✓</span><div><strong>좋은 예 (핵심 키워드 요약)</strong><br>"생명과학 — 유전자 발현 조절 탐구 → 후성유전학에 관심 생김 / 환경 동아리 — 학교 분리배출 캠페인 기획"</div></div>
+        </div>
+
+        <div class="tip-box">
+          ⏱️ <strong>시간이 없다면?</strong> 각 칸에 한 문장씩만 입력해도 돼요.<br>
+          최소 <strong>1학년 기록 1개 + 현재 관심 분야 1개 + 반복 키워드 2개</strong>만 채우면 다음 단계로 넘어갈 수 있습니다!
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--gold);"></div>이 단계가 끝나면</div>
+      <div style="font-size:14px;">하단의 <strong>"다음 단계 →"</strong> 버튼을 눌러 2단계로 이동하세요.</div>
+    </div>
+  </div>
+
+  <!-- ── 3. 2단계: 탐구 흐름 분석 ── -->
+  <div class="section">
+    <div id="sec3" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(155,143,232,0.15);color:var(--step2);">3</div>
+      <div class="section-title">
+        <h2>2단계 — 탐구 흐름 분석</h2>
+        <p>내 기록과 2학년 과목·진로를 연결하기</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      💡 2학년 탐구는 1학년 활동을 단순 반복하는 것이 아니라,<br>
+      1학년 관심사를 <strong>더 구체적인 질문으로 좁히거나, 부족했던 부분을 보완하거나, 새로운 과목 개념과 연결</strong>하는 과정입니다.
+    </div>
+
+    <div class="emerald-box">
+      <strong>🌱 2학년 탐구의 장점</strong><br>
+      지금 이 탐구 계획을 잘 세워두면 3학년에서 "갑자기 만든 탐구"가 아닌 <strong>1학년 → 2학년 → 3학년으로 이어지는 성장 서사</strong>를 만들 수 있습니다!
+    </div>
+
+    <div class="step-detail" style="border-color:var(--step2);">
+      <div class="step-detail-header" style="background:rgba(155,143,232,0.1);">
+        <div class="step-detail-badge" style="background:var(--step2);color:white;">2단계</div>
+        <div class="step-detail-title">탐구 흐름 분석</div>
+      </div>
+      <div class="step-detail-body">
+        <div class="step-detail-desc">
+          1단계에서 정리한 내용을 바탕으로, 2학년에서 어떤 탐구를 할 수 있을지 분석하는 단계예요.<br>
+          AI에 맡기기 전에 <strong>내가 먼저 스스로 생각</strong>해보는 중요한 과정!
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot"></div>기록 분석 — 반복 관심사와 강점</div>
+        <div class="input-list" style="margin-bottom:16px;">
+          <div class="input-item">
+            <span class="input-item-icon">🔁</span>
+            <div>
+              <div class="input-item-label">내 기록에서 계속 반복되는 관심사·주제 <span class="req-badge">필수</span></div>
+              <div class="input-item-desc">1단계 내용을 참고해 핵심만 정리 (예: 기후 변화와 생태계, 데이터 분석을 통한 사회 문제 탐구)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">📚</span>
+            <div>
+              <div class="input-item-label">내 강점이 가장 잘 드러난 과목</div>
+              <div class="input-item-desc">예) 생명과학, 수학, 사회·문화</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">📖</span>
+            <div>
+              <div class="input-item-label">2학년에서 이 탐구와 연결할 수 있는 현재 수강 과목</div>
+              <div class="input-item-desc">지금 배우고 있는 과목 중 탐구 주제와 연결 가능한 것 (예: 화학I, 사회·문화, 경제, 생명과학I)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🧠</span>
+            <div>
+              <div class="input-item-label">탐구에 활용할 수 있는 관련 교과 개념</div>
+              <div class="input-item-desc">예) 화학 반응 속도론(화학I), 사회 이동과 불평등(사회·문화), 수요·공급 탄력성(경제)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--lavender);"></div>진로 연결 및 탐구 성향</div>
+        <div class="input-list" style="margin-bottom:16px;">
+          <div class="input-item">
+            <span class="input-item-icon">🧭</span>
+            <div>
+              <div class="input-item-label">희망 진로 또는 관심 학과·전공 <span class="req-badge">필수</span></div>
+              <div class="input-item-desc">예) 의생명공학과, 환경공학과, 사회학과, 교육학과</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🔬</span>
+            <div>
+              <div class="input-item-label">나의 탐구 성향 (클릭해서 복수 선택 가능)</div>
+              <div class="input-item-desc">📄문헌분석형 · 📊자료분석형 · 🧪실험형 · 📋설문조사형 · 🎤인터뷰형 · 🔄사례비교형 · 💬토론·비평형 · 🛠️제작·개발형 · 📣캠페인·실천형 · 🌐융합탐구형</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--coral);"></div>기록의 빈틈과 구체화 방향</div>
+        <div class="input-list">
+          <div class="input-item">
+            <span class="input-item-icon">🕳️</span>
+            <div>
+              <div class="input-item-label">2학년에서 보완하면 좋은 기록의 빈틈</div>
+              <div class="input-item-desc">예) 1학년에서 캠페인·주장 수준에서 멈췄던 활동을 데이터·근거 기반으로 발전시켜야 함</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🚀</span>
+            <div>
+              <div class="input-item-label">1학년 관심사를 2학년에서 어떻게 구체화할 것인지</div>
+              <div class="input-item-desc">1학년보다 한 단계 더 깊거나 구체적인 방향 (예: 기후 변화 캠페인 → 우리 지역 기온 데이터와 질환 발생률의 상관관계 조사)</div>
+            </div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🔭</span>
+            <div>
+              <div class="input-item-label">3학년에서 더 심화하고 싶은 방향 <span class="opt-badge">선택</span></div>
+              <div class="input-item-desc">지금부터 3학년 흐름까지 생각하면 더욱 탄탄한 탐구 서사를 만들 수 있습니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-box" style="margin-top:14px;">
+          <div class="example-label">✏️ 입력 예시</div>
+          <div class="example-good"><span class="example-icon">✓</span><div>
+            <strong>기록의 빈틈:</strong> "캠페인·주장 수준에서 그쳤던 환경 활동을 데이터·통계 기반으로 심화해야 함"<br>
+            <strong>구체화 방향:</strong> "기후 변화 캠페인 → 우리 지역 기온 데이터와 호흡기 질환 발생률 상관관계 통계 분석"
+          </div></div>
+        </div>
+
+        <div class="tip-box">
+          ⏱️ <strong>시간이 부족하다면?</strong> <strong>반복 관심사, 강점 과목, 희망 진로</strong> 이 세 가지만 채워도 다음 단계로 갈 수 있습니다.<br>
+          탐구 성향 칩은 <strong>1개</strong>만 선택해도 됩니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. 3단계: AI 프롬프트 생성 ── -->
+  <div class="section">
+    <div id="sec4" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(42,181,160,0.12);color:#0f6e56;">4</div>
+      <div class="section-title">
+        <h2>3단계 — AI 프롬프트 생성</h2>
+        <p>ChatGPT·Claude에 붙여넣을 질문 자동 생성</p>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      ⚠️ <strong>개인정보 주의!</strong> ChatGPT·Claude 등 외부 AI에 입력할 때는 <strong>이름·학번·학교명·주소·연락처·가족 정보 등 개인정보를 입력하지 마세요.</strong><br>
+      앱에서 자동으로 생성되는 프롬프트에는 개인정보가 이미 빠져 있어요.
+    </div>
+
+    <div class="info-box">
+      💡 <strong>AI 결과 활용 안내</strong><br>
+      AI가 제안한 탐구 주제는 <strong>초안</strong>입니다. 최종 주제는 자신의 실제 경험·수강 과목·학교 여건·수행 가능성을 기준으로 반드시 수정해야 합니다.
+    </div>
+
+    <div class="step-detail" style="border-color:var(--step3);">
+      <div class="step-detail-header" style="background:rgba(42,181,160,0.08);">
+        <div class="step-detail-badge" style="background:var(--step3);color:white;">3단계</div>
+        <div class="step-detail-title">AI 프롬프트 생성</div>
+      </div>
+      <div class="step-detail-body">
+        <div class="step-detail-desc">
+          앱이 1·2단계에서 입력한 내용을 바탕으로 AI에게 줄 질문(프롬프트)을 자동으로 만들어줘요.<br>
+          학생은 <strong>📋 복사 버튼</strong>을 누르고 ChatGPT 또는 Claude 창에 붙여넣으면 됩니다!
+        </div>
+
+        <div class="info-box" style="background:rgba(77,184,232,0.08); border-color:var(--sky); color:#1a5a7a;">
+          <strong>📋 사용 순서</strong><br>
+          ① 주제 추천 프롬프트 복사 → AI에 붙여넣기 → 주제 후보 5개 받기<br>
+          ② 주제 검증 프롬프트 복사 → AI 결과 붙여넣어 검증 → 수정 방향 파악<br>
+          ③ 계획서 구체화 프롬프트 복사 → 선택한 주제로 탐구계획서 생성
+        </div>
+
+        <div class="card-title" style="margin-bottom:12px;"><div class="dot"></div>3가지 프롬프트 — 순서대로 사용하세요</div>
+
+        <div class="prompt-row">
+          <div class="prompt-card-mini" style="border-color:var(--teal);background:rgba(42,181,160,0.05);">
+            <div class="p-num" style="color:var(--teal);">① 주제 추천 프롬프트</div>
+            <div class="p-title">내 생기부 → 2학년 탐구 주제 후보 5개 생성</div>
+            <div class="p-desc">1·2단계에서 입력한 내용을 AI가 분석해 나에게 맞는 2학년 진로연계 탐구 주제 5개를 만들어줍니다.</div>
+            <div class="p-what">
+              AI가 주제마다 돌려주는 것: 탐구 주제명 · 1학년 기록과의 연결 근거 · 2학년에서 구체화·발전되는 지점 · 관련 교과 개념 · 핵심 탐구 질문 2개 · 탐구 방법(10단계 흐름) · 추천 도서 1~2권 · 교내 활용 방식 · 추천도 ★ · 3학년 심화 방향
+            </div>
+          </div>
+
+          <div class="prompt-card-mini" style="border-color:var(--sky);background:rgba(77,184,232,0.05);">
+            <div class="p-num" style="color:var(--sky);">② 주제 검증 프롬프트</div>
+            <div class="p-title">①의 결과를 다시 AI에게 평가시키기</div>
+            <div class="p-desc">①에서 받은 주제 목록을 앱에 붙여넣으면 검증 프롬프트가 자동 생성됩니다. 8가지 기준으로 평가받아요.</div>
+            <div class="p-what">
+              검증 기준 8가지: 연계성 · 구체화성 · 교과성 · 실행가능성 · 진로적합성 · 독서 연계 가능성 · 기록가능성 · 차별성<br>
+              각 기준마다 상/중/하 평가 + 수정 방향 제시
+            </div>
+          </div>
+
+          <div class="prompt-card-mini" style="border-color:var(--lavender);background:rgba(155,143,232,0.05);">
+            <div class="p-num" style="color:var(--lavender);">③ 탐구계획서 구체화 프롬프트</div>
+            <div class="p-title">최종 선택 주제 → 탐구계획서 초안 완성</div>
+            <div class="p-desc">주제명과 선택 이유를 입력하면 실제 탐구계획서 초안이 만들어집니다. 독서 연계·교내 활용·자기성장·3학년 확장 방향까지 포함한 12항목 계획서가 채워져요.</div>
+            <div class="p-what">
+              계획서 12항목: 탐구 동기 · 1학년 기록과의 연계성 · 2학년 교과 개념 연결 · 구체화·발전 지점 · 핵심 탐구 질문 · 탐구 방법 · 자료 수집 계획 · 독서 또는 기사 연계 · 실행 일정 · 예상 산출물 · 교내 발표·전시·활용 방안 · 3학년 심화 방향 + 세특 기록 포인트
+            </div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--sky);"></div>사용 방법 (클릭 3번이면 끝!)</div>
+        <ol class="num-list">
+          <li>앱에서 <code>📋 복사</code> 버튼 클릭 → "🚀 프롬프트가 복사되었습니다!" 메시지 확인</li>
+          <li>ChatGPT 또는 Claude 창을 열어요 (앱 안에 <strong>🤖 ChatGPT 열기</strong> / <strong>🧠 Claude 열기</strong> 버튼이 있어요)</li>
+          <li>채팅창에 <code>Ctrl+V</code> (Mac은 <code>Cmd+V</code>) 로 붙여넣기 후 전송!</li>
+        </ol>
+
+        <div class="tip-box" style="margin-top:12px;">
+          💡 <strong>①→②→③ 순서가 중요해요!</strong><br>
+          ①의 결과를 받은 다음 ②에서 검증하고, 검증을 마친 후에 ③으로 계획서를 만드는 게 가장 좋은 결과를 냅니다.
+        </div>
+
+        <div style="margin-top:16px;">
+          <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--lavender);"></div>AI가 제안하는 탐구 전개 10단계 흐름</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">① 주제 추천 프롬프트에서 AI는 탐구 방법을 아래 10단계 흐름으로 구체적으로 제시합니다.</div>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-text"><strong>문제의식 형성</strong> — 실생활·뉴스·1학년 경험에서 출발</div></div>
+            <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-text"><strong>탐구 질문 구체화</strong> — "왜 중요한지?", "어떤 영향이?" 등으로 초점 잡기</div></div>
+            <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-text"><strong>탐구 계획 수립</strong> — 자료 수집 방법, 변수 설정 등</div></div>
+            <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-text"><strong>배경 조사</strong> — 교과 개념 정리, <strong>독서</strong>, 통계·사례 수집</div></div>
+            <div class="flow-step"><div class="flow-step-num">5</div><div class="flow-step-text"><strong>핵심 활동 수행</strong> — 설문·인터뷰·사례분석·관찰 등 (고등학생이 실제로 가능한 것)</div></div>
+            <div class="flow-step"><div class="flow-step-num">6</div><div class="flow-step-text"><strong>교과 개념으로 분석</strong> — 배운 개념·사고 도구로 결과 해석</div></div>
+            <div class="flow-step"><div class="flow-step-num">7</div><div class="flow-step-text"><strong>결과 해석 및 자기 성찰</strong> — 시행착오, 한계, 느낀 점</div></div>
+            <div class="flow-step"><div class="flow-step-num">8</div><div class="flow-step-text"><strong>후속 활동 기획</strong> — 포스터·발표·제안서·캠페인 등 교내 활용</div></div>
+            <div class="flow-step"><div class="flow-step-num">9</div><div class="flow-step-text"><strong>구체적 해결방안 제시</strong> — 학문적·실천적 개선 아이디어</div></div>
+            <div class="flow-step"><div class="flow-step-num">10</div><div class="flow-step-text"><strong>자기 성장 기술 + 3학년 심화 방향</strong> — "이 탐구로 나는 무엇을 배웠고 어떻게 성장했는가?"</div></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--teal);"></div>독서 연계 결과 예시</div>
+          <div class="example-box">
+            <div class="example-label">🔖 ①에서 AI가 돌려주는 독서 연계 예시 (환경·생명과학 계열 학생)</div>
+            <div class="example-good"><span class="example-icon">📖</span><div>
+              <strong>추천 도서:</strong> 『침묵의 봄』 (레이첼 카슨) — 화학물질이 생태계에 미치는 영향을 탐구의 배경 문제의식으로 활용할 수 있음<br>
+              <strong>후속 활동:</strong> 책에서 제기한 문제와 나의 탐구 주제(미세먼지와 호흡기 질환)를 비교 정리 → 교내 발표 자료로 확장
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. 4단계: 주제 확정 & 계획서 ── -->
+  <div class="section">
+    <div id="sec5" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:rgba(245,200,66,0.2);color:#92610a;">5</div>
+      <div class="section-title">
+        <h2>4단계 — 주제 확정 &amp; 탐구계획서</h2>
+        <p>AI 결과 직접 평가 → 최종 2학년 탐구계획서 완성</p>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      ⚠️ <strong>중요</strong> AI가 제안한 주제를 그대로 사용하지 마세요. 자신의 실제 경험·수강 과목·학교 여건에 맞게 <strong>반드시 수정·보완</strong>해야 합니다.
+    </div>
+
+    <div class="info-box">
+      ⏱️ <strong>시간이 부족하다면? — 최소 입력 기준</strong><br>
+      • 후보 주제 <strong>1개 + 별점 평가</strong>만 해도 됩니다. 나머지 2개는 선택 사항입니다.<br>
+      • 탐구계획서는 <strong>탐구 동기, 핵심 탐구 질문, 탐구 방법</strong> 세 항목만 채워도 제출이 가능합니다.<br>
+      • 계획서 나머지 항목은 선생님과 상담 후 추가해도 됩니다.
+    </div>
+
+    <div class="step-detail" style="border-color:var(--step4);">
+      <div class="step-detail-header" style="background:rgba(245,200,66,0.1);">
+        <div class="step-detail-badge" style="background:var(--step4);color:var(--navy);">4단계</div>
+        <div class="step-detail-title">주제 확정 &amp; 탐구계획서</div>
+      </div>
+      <div class="step-detail-body">
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--sky);"></div>A. AI 주제 후보 검토</div>
+        <div class="input-list" style="margin-bottom:14px;">
+          <div class="input-item">
+            <span class="input-item-icon">📝</span>
+            <div><div class="input-item-label">AI 전체 결과 붙여넣기</div><div class="input-item-desc">ChatGPT/Claude의 주제 추천 결과를 참고용으로 붙여넣어요</div></div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">🗂️</span>
+            <div><div class="input-item-label">후보 주제 1·2·3 입력</div><div class="input-item-desc">AI가 제안한 주제 중 마음에 드는 것 최대 3개 직접 적기</div></div>
+          </div>
+          <div class="input-item">
+            <span class="input-item-icon">⭐</span>
+            <div>
+              <div class="input-item-label">7가지 기준으로 별점 평가 (각 1~5점)</div>
+              <div class="input-item-desc">아래 표를 참고해 각 주제를 점수로 평가해 보세요</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="score-table">
+          <thead>
+            <tr><th>평가 기준</th><th>판단 질문</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>연계성</strong></td><td>내 1학년 활동·관심사와 자연스럽게 이어지는가?</td></tr>
+            <tr><td><strong>구체화성</strong></td><td>1학년보다 더 구체적·발전된 탐구인가?</td></tr>
+            <tr><td><strong>교과성</strong></td><td>2학년 수강 과목의 핵심 개념이 들어가는가?</td></tr>
+            <tr><td><strong>실행가능성</strong></td><td>우리 학교에서 3~5주 내에 실제로 할 수 있는가?</td></tr>
+            <tr><td><strong>진로적합성</strong></td><td>내 관심 학과·진로와 연결되는가?</td></tr>
+            <tr><td><strong>차별성</strong></td><td>너무 흔하거나 추상적인 주제는 아닌가?</td></tr>
+            <tr><td><strong>기록가능성</strong></td><td>선생님이 관찰하고 세특에 써줄 장면이 있는가?</td></tr>
+          </tbody>
+        </table>
+
+        <div class="input-list" style="margin-top:10px;margin-bottom:14px;">
+          <div class="input-item">
+            <span class="input-item-icon">✅</span>
+            <div><div class="input-item-label">최종 선택 주제 &amp; 선택 이유</div><div class="input-item-desc">가장 높은 점수 또는 내 상황에 가장 맞는 주제를 선택하고 이유를 짧게 적어요</div></div>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--gold);"></div>B. 최종 탐구계획서 작성 (12항목)</div>
+        <div class="input-list">
+          <div class="input-item"><span class="input-item-icon">💭</span><div><div class="input-item-label">탐구 동기</div><div class="input-item-desc">왜 이 주제를 탐구하려 하는지, 1학년 어떤 경험에서 출발했는지</div></div></div>
+          <div class="input-item"><span class="input-item-icon">🔗</span><div><div class="input-item-label">1학년 기록과의 연계성</div><div class="input-item-desc">어떤 1학년 생기부 기록에서 이 주제가 출발했는지 구체적으로</div></div></div>
+          <div class="input-item"><span class="input-item-icon">🧩</span><div><div class="input-item-label">2학년 교과 개념과의 연결</div><div class="input-item-desc">예) 사회·문화 — 사회 불평등 지표, 화학I — 산화·환원 반응</div></div></div>
+          <div class="input-item"><span class="input-item-icon">📈</span><div><div class="input-item-label">구체화·발전되는 지점</div><div class="input-item-desc">"1학년에서 캠페인 수준이었다면, 2학년에서는 실제 데이터를 수집해 통계적으로 분석하는 수준으로 발전"</div></div></div>
+          <div class="input-item"><span class="input-item-icon">❓</span><div><div class="input-item-label">핵심 탐구 질문 (1~2개)</div><div class="input-item-desc">"왜?", "어떤 조건에서?", "어떤 영향이?" 형태로 구체적으로</div></div></div>
+          <div class="input-item"><span class="input-item-icon">🔬</span><div><div class="input-item-label">탐구 방법</div><div class="input-item-desc">고등학생이 실제로 할 수 있는 방법 (공공데이터 수집 + 설문 + 문헌 분석 등)</div></div></div>
+          <div class="input-item"><span class="input-item-icon">📊</span><div><div class="input-item-label">자료 수집 계획</div><div class="input-item-desc">예) 환경부 에어코리아 데이터, 건강보험공단 지역별 통계, 교내 학생 설문(30명)</div></div></div>
+          <div class="input-item"><span class="input-item-icon">📖</span><div><div class="input-item-label">독서 또는 기사 연계</div><div class="input-item-desc">읽을 책 1~2권 + 탐구와의 연결 + 독서 후 할 활동 (예: 요약 정리, 비판적 의견 작성)</div></div></div>
+          <div class="input-item"><span class="input-item-icon">📅</span><div><div class="input-item-label">실행 일정 (3~5주)</div><div class="input-item-desc">1주: 탐구 계획 + 자료 수집 / 2주: 배경 조사·독서 / 3주: 핵심 활동 / 4주: 분석·산출물 / 5주: 발표·전시</div></div></div>
+          <div class="input-item"><span class="input-item-icon">🏫</span><div><div class="input-item-label">예상 산출물 및 교내 발표·전시·활용 방안</div><div class="input-item-desc">탐구 보고서·포스터·발표 PPT 등 + 학교 안에서 실제로 활용 가능한 방식 (예: 복도 전시, 학생회 제안서)</div></div></div>
+          <div class="input-item"><span class="input-item-icon">🔭</span><div><div class="input-item-label">3학년에서 더 심화할 수 있는 방향</div><div class="input-item-desc">예) 2학년에서 상관관계를 분석했다면, 3학년에서는 원인 분석과 정책 대안까지 연구</div></div></div>
+          <div class="input-item"><span class="input-item-icon">👁️</span><div><div class="input-item-label">세특 기록 포인트</div><div class="input-item-desc">교사가 관찰하고 기록할 수 있는 구체적인 활동 장면을 적어두세요</div></div></div>
+        </div>
+
+        <div class="example-box" style="margin-top:14px;">
+          <div class="example-label">✏️ 독서 연계 작성 예시</div>
+          <div class="example-good"><span class="example-icon">📖</span><div>
+            <strong>읽을 책:</strong> 『침묵의 봄』 (레이첼 카슨)<br>
+            <strong>탐구 연결:</strong> 화학물질이 생태계에 미치는 영향 → 나의 "미세먼지와 호흡기 질환" 탐구의 배경 근거로 활용<br>
+            <strong>독서 후 활동:</strong> 책에서 저자가 제기한 문제와 내 탐구 주제를 비교·정리해 한 페이지 요약 작성
+          </div></div>
+        </div>
+
+        <div class="tip-box" style="margin-top:14px;">
+          💡 모든 칸을 완벽하게 채우려 하지 않아도 돼요.<br>
+          <strong>핵심 내용을 먼저 채우고, 나머지는 선생님과 상담 후 보완</strong>하는 방식도 좋아요.
+        </div>
+
+        <div style="margin-top:16px;background:rgba(155,143,232,0.07);border:1.5px solid rgba(155,143,232,0.3);border-radius:12px;padding:14px 16px;">
+          <div class="card-title" style="margin-bottom:8px;"><div class="dot" style="background:var(--lavender);"></div>교사 피드백 메모 <span class="opt-badge">선택</span></div>
+          <div style="font-size:13px;color:var(--muted);">4단계 하단의 <strong>교사 피드백 메모</strong> 칸에 담당 선생님의 피드백이나 수정 사항을 기록해 두세요. 상담 후 계획서를 보완할 때 유용합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. 저장·출력 ── -->
+  <div class="section">
+    <div id="sec6" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:#fff1f2;color:#9f1239;">6</div>
+      <div class="section-title">
+        <h2>저장 · 출력</h2>
+        <p>작성한 내용을 저장하고 출력하는 방법</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--teal);"></div>💾 제출 &amp; 저장</div>
+      <ol class="num-list">
+        <li>4단계 하단의 <strong>"💾 제출 &amp; 저장"</strong> 버튼을 클릭하세요.</li>
+        <li>학번과 이름이 입력되어 있어야 저장돼요. (미입력 시 경고 메시지가 뜹니다)</li>
+        <li>저장 완료 시 "✅ 작성이 완료되었습니다!" 메시지가 나타납니다.</li>
+      </ol>
+      <div class="warn-box" style="margin-top:12px;">
+        ⚠️ 데이터는 이 기기(브라우저)에 저장돼요. <strong>창을 닫기 전에 반드시 저장</strong>하세요! 저장 안 하면 데이터가 사라질 수 있어요.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--navy);"></div>🖨️ 출력 (PDF 저장)</div>
+      <ol class="num-list">
+        <li>화면 오른쪽 하단의 <strong>🖨️ 버튼</strong> 클릭 (또는 4단계 하단의 <strong>"🖨️ 출력"</strong> 버튼)</li>
+        <li>인쇄 창이 열리면 <strong>"PDF로 저장"</strong>을 선택해 PDF 파일로 저장 가능</li>
+        <li>출력물에는 1~4단계 내용 전체 + 서명란이 자동으로 포함됩니다</li>
+        <li>A4 용지에 맞게 자동으로 정리됩니다</li>
+      </ol>
+      <div class="info-box" style="margin-top:12px;">
+        💡 출력물은 교과 선생님께 드리는 상담 자료나 포트폴리오 자료로 바로 활용 가능해요!
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7. Q&A ── -->
+  <div class="section">
+    <div id="sec7" class="section-anchor"></div>
+    <div class="section-header">
+      <div class="section-num" style="background:#f1f5f9;color:#334155;">Q</div>
+      <div class="section-title">
+        <h2>자주 묻는 질문</h2>
+        <p>클릭하면 답변이 펼쳐져요</p>
+      </div>
+    </div>
+
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>앱을 설치해야 하나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">아니요! 설치가 필요 없어요. HTML 파일을 인터넷 브라우저(Chrome, Edge, Safari 등)로 열기만 하면 바로 사용 가능합니다. 파일을 더블클릭하거나 브라우저 창으로 드래그해 열어보세요.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>2학년 학생부가 아직 완성되지 않았어도 되나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">네! 이 앱은 <strong>1학년 기록 + 2학년 현재 관심사</strong>를 바탕으로 합니다. 2학년 학생부는 아직 완성되지 않아도 괜찮아요. 지금 수강 중인 수업에서 관심이 생긴 내용, 최근 인상 깊었던 활동·책·뉴스를 중심으로 적으면 됩니다.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>생기부를 그대로 복사해 붙여넣어도 되나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">앱 내 입력 칸에는 괜찮아요. 단, ChatGPT·Claude 등 외부 AI에 보낼 때는 생기부 전문 문장을 통째로 붙여넣지 마세요. 앱이 자동으로 만드는 프롬프트는 핵심 키워드 중심으로 정리되어 있어서, 그대로 복사해서 쓰면 됩니다.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>AI가 제안한 주제를 그대로 써도 되나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">안 됩니다! AI가 제안한 주제는 어디까지나 초안(아이디어)이에요. 학생 본인의 실제 경험, 2학년 수강 과목, 학교 여건, 실제 수행 가능성을 고려해서 반드시 수정·보완해야 해요. 4단계의 7가지 별점 평가가 이 판단을 도와줍니다.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>저장이 안 되는 것 같아요.</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">학번과 이름이 입력되어 있는지 확인하세요. 두 항목이 없으면 저장이 안 됩니다. 또한 브라우저의 시크릿 모드(프라이빗 모드)에서는 저장이 안 될 수 있어요. 일반 창에서 다시 열어보세요.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>중간에 저장하고 나중에 이어서 할 수 있나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">"제출 &amp; 저장" 버튼을 눌러야만 데이터가 저장됩니다. 중간에 창을 닫으면 저장되지 않은 내용이 사라질 수 있어요. 작성 중 자리를 비울 때는 입력 내용을 메모장 등에 임시 복사해두는 것을 권장합니다.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>스마트폰에서도 사용할 수 있나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">네! 모바일에서도 사용할 수 있어요. 다만 입력할 내용이 많아서 PC나 태블릿이 더 편리합니다. 스마트폰에서 파일을 열 때는 Chrome·Safari 브라우저 앱을 사용하세요.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>1학년 기록이 많지 않아도 괜찮나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">괜찮아요! 각 칸에 한 문장씩만 입력해도 됩니다. 최소한 <strong>1학년 기록 1개 + 현재 관심 분야 1개 + 반복 키워드 2개</strong>만 입력하면 다음 단계로 갈 수 있습니다. 나머지는 나중에 수정해도 충분합니다.</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>이 앱으로 만든 탐구계획서를 바로 제출해도 되나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">바로 제출보다는 <strong>담당 선생님과 상담 후 보완</strong>하는 것을 추천해요. 4단계 하단의 교사 피드백 메모 칸에 선생님의 의견을 기록해두고 수정하면 더욱 완성도 높은 계획서가 됩니다. 출력물을 상담 자료로 활용해보세요!</div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <div class="qa-q-badge">Q</div>
+          <div>3학년에서도 이 탐구를 이어서 할 수 있나요?</div>
+          <span class="qa-arrow">▼</span>
+        </div>
+        <div class="qa-a">네, 그게 바로 이 앱의 핵심 목적이에요! 2단계에서 "3학년에서 더 심화하고 싶은 방향"을 미리 적어두면, 3학년에서 갑자기 새 주제를 찾는 것이 아니라 <strong>1학년 → 2학년 → 3학년으로 이어지는 성장 서사</strong>를 자연스럽게 만들 수 있습니다. 탐구의 깊이와 연속성이 입시에서 큰 강점이 됩니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <strong>학생부 기반 2학년 진로연계 탐구 설계기 v1</strong> 사용 매뉴얼<br>
+  1단계부터 순서대로 따라가면 누구나 탐구계획서를 완성할 수 있어요 ✓<br>
+  <span style="font-size:11px;margin-top:6px;display:block;color:rgba(255,255,255,0.4);">인쇄 시 브라우저 인쇄 메뉴 → PDF로 저장 권장</span>
+</div>
+
+<script>
+function toggleQA(el) {
+  const item = el.closest('.qa-item');
+  item.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
