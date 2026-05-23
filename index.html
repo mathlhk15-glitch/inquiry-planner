@@ -1,1672 +1,384 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>학생부 기반 2학년 진로연계 탐구 설계기 v1</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #1a3a5c;
-    --navy-mid: #235080;
-    --teal: #2ab5a0;
-    --teal-light: #5dd3c0;
-    --gold: #f5c842;
-    --coral: #ff6b6b;
-    --lavender: #9b8fe8;
-    --sky: #4db8e8;
-    --emerald: #22c55e;
-    --bg: #f0f6fb;
-    --card: #ffffff;
-    --text: #1a2540;
-    --muted: #6b7a99;
-    --border: #dde3f0;
-    --green: #22c55e;
-    --orange: #f97316;
-    --red: #ef4444;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>창원경일고 탐구성장 플랫폼</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:    #0f1f3d;
+      --navy2:   #1b3260;
+      --navy3:   #243d73;
+      --teal:    #16a394;
+      --teal2:   #e7faf7;
+      --teal3:   #0d7a6e;
+      --gold:    #f4c430;
+      --bg:      #f0f4fb;
+      --bg2:     #e8edf7;
+      --card:    #ffffff;
+      --text:    #1f2937;
+      --muted:   #667085;
+      --line:    #dbe3f0;
+      --shadow:  0 4px 20px rgba(15,31,61,.08);
+      --shadow2: 0 12px 40px rgba(15,31,61,.14);
+    }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: keep-all;
+      min-height: 100vh;
+    }
 
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+    /* ── 전체 배경 패턴 ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 15%, rgba(22,163,148,.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(15,31,61,.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-  /* ── Header ── */
-  header {
-    background: linear-gradient(135deg, #1a3a5c 0%, #235080 100%);
-    color: white;
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 260px; height: 260px;
-    background: radial-gradient(circle, rgba(42,181,160,0.25) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: 10%;
-    width: 180px; height: 180px;
-    background: radial-gradient(circle, rgba(245,200,66,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .header-inner {
-    position: relative; z-index: 1;
-    max-width: 900px; margin: 0 auto;
-    padding: 28px 24px 20px;
-  }
-  .school-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px; font-weight: 500;
-    color: rgba(255,255,255,0.85);
-    margin-bottom: 14px;
-  }
-  .school-badge span { color: var(--teal-light); }
-  header h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: clamp(18px, 4.5vw, 26px);
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 6px;
-  }
-  header h1 em { color: var(--teal-light); font-style: normal; }
-  header p { font-size: 13px; color: rgba(255,255,255,0.65); }
+    /* ── 헤더 ── */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1a4a6b 100%);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+    }
+    .header-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .header-text { line-height: 1.25; }
+    .header-title {
+      font-size: 14px; font-weight: 800;
+      color: #fff; letter-spacing: -.3px;
+    }
+    .header-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,.6);
+      font-weight: 500;
+    }
 
-  /* ── Student Info Bar ── */
-  .info-bar {
-    background: white;
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    max-width: 900px; margin: 0 auto;
-    display: flex; gap: 12px; align-items: center;
-    flex-wrap: wrap;
-    padding-top: 14px; padding-bottom: 14px;
-  }
-  .info-field {
-    display: flex; align-items: center; gap: 8px;
-  }
-  .info-field label { font-size: 12px; color: var(--muted); font-weight: 500; white-space: nowrap; }
-  .info-field input, .info-field select {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 13px;
-    font-family: 'Noto Sans KR', sans-serif;
-    outline: none;
-    background: var(--bg);
-    color: var(--text);
-    width: 100px;
-    transition: border-color .2s;
-  }
-  .info-field input:focus, .info-field select:focus { border-color: var(--teal); }
-  .info-field input.wide { width: 140px; }
+    /* ── 메인 ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
 
-  /* ── Steps Nav ── */
-  .steps-nav {
-    max-width: 900px; margin: 0 auto;
-    padding: 20px 24px 0;
-    display: flex; gap: 0;
-  }
-  .step-btn {
-    flex: 1;
-    background: none; border: none; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 6px; padding: 0 4px;
-  }
-  .step-num {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700;
-    background: var(--border); color: var(--muted);
-    transition: all .3s;
-    position: relative;
-  }
-  .step-btn.active .step-num {
-    background: var(--navy); color: white;
-    box-shadow: 0 4px 12px rgba(26,58,92,0.35);
-  }
-  .step-btn.done .step-num {
-    background: var(--teal); color: white;
-  }
-  .step-btn.done .step-num::after {
-    content: '✓';
-    position: absolute;
-    font-size: 11px;
-  }
-  .step-btn.done .step-num span { display: none; }
-  .step-label {
-    font-size: 10px; font-weight: 500;
-    color: var(--muted); text-align: center; line-height: 1.3;
-    transition: color .3s;
-  }
-  .step-btn.active .step-label { color: var(--navy); font-weight: 700; }
-  .step-connector {
-    flex: 0 0 20px;
-    height: 2px; background: var(--border);
-    margin-top: 17px;
-    transition: background .3s;
-  }
-  .step-connector.done { background: var(--teal); }
+    /* ── 히어로 영역 ── */
+    .hero {
+      text-align: center;
+      margin-bottom: 52px;
+      animation: fadeUp .55s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .school-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal2);
+      color: var(--teal3);
+      border: 1px solid rgba(22,163,148,.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 22px;
+      letter-spacing: -.2px;
+    }
+    .school-badge span { font-size: 14px; }
+    h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -1px;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--teal3);
+    }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
 
-  /* ── Main ── */
-  main {
-    max-width: 900px; margin: 0 auto;
-    padding: 20px 24px 60px;
-  }
+    /* ── 스텝 카드 ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      animation: fadeUp .55s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+    .step-card:nth-child(1) { animation-delay: .1s; }
+    .step-card:nth-child(2) { animation-delay: .2s; }
+    .step-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow2);
+      border-color: rgba(22,163,148,.3);
+    }
+    .step-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      border-radius: 20px 0 0 20px;
+      background: linear-gradient(to bottom, var(--teal), var(--navy2));
+    }
+    .step-num-wrap {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: -1px;
+      box-shadow: 0 4px 12px rgba(15,31,61,.2);
+    }
+    .step-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .step-body { flex: 1; min-width: 0; }
+    .step-title {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.4px;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .step-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--bg2);
+      color: var(--navy3);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .step-arrow {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      transition: background .15s, color .15s, transform .15s;
+    }
+    .step-card:hover .step-arrow {
+      background: var(--teal2);
+      color: var(--teal3);
+      border-color: rgba(22,163,148,.3);
+      transform: translateX(3px);
+    }
 
-  .panel { display: none; }
-  .panel.active { display: block; animation: fadeUp .4s ease; }
+    /* ── 구분선 화살표 ── */
+    .connector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 0;
+    }
+    .connector svg { color: var(--teal3); }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    /* ── 안내 박스 ── */
+    .info-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: fadeUp .55s .3s ease both;
+    }
+    .info-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .info-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .info-text strong { color: var(--text); }
 
-  /* ── Section Header ── */
-  .section-header {
-    display: flex; align-items: flex-start; gap: 14px;
-    margin-bottom: 20px;
-  }
-  .step-badge {
-    background: var(--navy);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px; font-weight: 700;
-    white-space: nowrap; margin-top: 3px;
-  }
-  .section-title h2 {
-    font-size: 18px; font-weight: 700; color: var(--navy);
-    margin-bottom: 4px;
-  }
-  .section-title p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    /* ── 푸터 ── */
+    footer {
+      text-align: center;
+      padding: 24px 20px 32px;
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+      animation: fadeUp .55s .4s ease both;
+    }
 
-  /* ── Card ── */
-  .card {
-    background: var(--card);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .card-title {
-    font-size: 13px; font-weight: 700; color: var(--navy);
-    margin-bottom: 14px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .card-title .dot {
-    width: 8px; height: 8px; border-radius: 2px;
-    background: var(--teal); flex-shrink: 0;
-  }
-
-  /* ── Textarea ── */
-  .field-textarea {
-    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
-    padding: 10px 14px; font-size: 13px; font-family: inherit;
-    color: var(--text); resize: vertical; outline: none;
-    transition: border-color .2s; background: white; line-height: 1.6;
-    min-height: 80px;
-  }
-  .field-textarea:focus { border-color: var(--teal); }
-  .field-textarea.sm { min-height: 60px; font-size: 12px; }
-  .field-input {
-    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
-    padding: 9px 14px; font-size: 13px; font-family: inherit;
-    color: var(--text); outline: none;
-    transition: border-color .2s; background: white;
-  }
-  .field-input:focus { border-color: var(--teal); }
-
-  /* ── Field label ── */
-  .field-label {
-    font-size: 12px; font-weight: 700; color: var(--navy);
-    margin-bottom: 6px; display: block;
-  }
-  .field-hint {
-    font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5;
-  }
-  .field-group { margin-bottom: 16px; }
-
-  /* ── 탐구 성향 칩 ── */
-  .tendency-grid {
-    display: flex; flex-wrap: wrap; gap: 8px;
-  }
-  .tendency-chip {
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: all .2s;
-    background: var(--bg);
-    font-size: 12px; font-weight: 600; color: var(--muted);
-  }
-  .tendency-chip:hover { border-color: var(--teal); color: var(--teal); }
-  .tendency-chip.selected {
-    border-color: var(--navy); background: var(--navy); color: white;
-  }
-
-  /* ── Tip Box ── */
-  .tip-box {
-    background: rgba(245,200,66,0.12); border-left: 3px solid var(--gold);
-    border-radius: 0 8px 8px 0; padding: 10px 14px;
-    font-size: 11px; color: #7a6000; line-height: 1.6;
-    margin-bottom: 14px;
-  }
-  .tip-box strong { font-weight: 700; }
-
-  /* ── Warning Box ── */
-  .warn-box {
-    background: rgba(255,107,107,0.08); border-left: 3px solid var(--coral);
-    border-radius: 0 8px 8px 0; padding: 10px 14px;
-    font-size: 11px; color: #9a2020; line-height: 1.6;
-    margin-bottom: 14px;
-  }
-  .warn-box strong { font-weight: 700; }
-
-  /* ── Info Box ── */
-  .info-box {
-    background: rgba(30,184,160,0.08); border-left: 3px solid var(--teal);
-    border-radius: 0 8px 8px 0; padding: 10px 14px;
-    font-size: 11px; color: #0d7a69; line-height: 1.6;
-    margin-bottom: 14px;
-  }
-
-  /* ── Emerald Info Box ── */
-  .emerald-box {
-    background: rgba(34,197,94,0.08); border-left: 3px solid var(--emerald);
-    border-radius: 0 8px 8px 0; padding: 10px 14px;
-    font-size: 11px; color: #166534; line-height: 1.6;
-    margin-bottom: 14px;
-  }
-  .emerald-box strong { font-weight: 700; }
-
-  /* ── Prompt Box ── */
-  .prompt-box {
-    background: #f8faff; border: 1.5px solid var(--navy);
-    border-radius: 10px; padding: 14px 16px;
-    font-size: 12px; line-height: 1.8; color: var(--text);
-    white-space: pre-wrap; word-break: break-all;
-    max-height: 300px; overflow-y: auto;
-    margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif;
-  }
-
-  /* ── Prompt Card ── */
-  .prompt-card {
-    background: white; border-radius: 14px; border: 1px solid var(--border);
-    overflow: hidden; margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .prompt-card-header {
-    padding: 12px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
-  .prompt-card-title {
-    font-size: 13px; font-weight: 700; color: var(--navy);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .prompt-num {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--navy); color: white;
-    font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .prompt-card-body { padding: 14px 16px; }
-  .prompt-desc { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
-
-  /* ── AI Link Buttons ── */
-  .ai-links {
-    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
-  }
-  .ai-link-btn {
-    flex: 1; min-width: 140px;
-    padding: 12px 16px; border-radius: 12px; border: none;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    font-family: inherit; transition: all .2s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    text-decoration: none;
-  }
-  .ai-link-gpt { background: #10a37f; color: white; }
-  .ai-link-gpt:hover { background: #0d8a6b; transform: translateY(-1px); }
-  .ai-link-claude { background: var(--coral); color: white; }
-  .ai-link-claude:hover { background: #e05555; transform: translateY(-1px); }
-
-  /* ── Score Rating ── */
-  .score-row {
-    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-  }
-  .score-row:last-child { border-bottom: none; }
-  .score-label { font-size: 12px; font-weight: 600; color: var(--text); }
-  .score-hint { font-size: 11px; color: #0d7a69; margin-top: 3px; font-weight: 500; }
-  .star-rating {
-    display: flex; gap: 4px;
-  }
-  .star {
-    width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid var(--border);
-    background: var(--bg); cursor: pointer; font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted); transition: all .15s; flex-shrink: 0;
-  }
-  .star:hover, .star.on { background: var(--gold); border-color: #c89a00; color: #6b4c00; }
-
-  /* ── Candidate Card ── */
-  .candidate-card {
-    background: white; border-radius: 12px; border: 1.5px solid var(--border);
-    padding: 14px 16px; margin-bottom: 10px;
-    transition: border-color .2s;
-  }
-  .candidate-card.chosen { border-color: var(--navy); background: rgba(26,58,92,0.02); }
-  .candidate-header {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-  }
-  .candidate-num {
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 8px; padding: 3px 10px;
-    font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0;
-  }
-  .candidate-input {
-    flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
-    padding: 7px 12px; font-size: 13px; font-family: inherit;
-    color: var(--text); outline: none; background: var(--bg);
-    transition: border-color .2s;
-  }
-  .candidate-input:focus { border-color: var(--teal); }
-
-  /* ── Buttons ── */
-  .btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-  .btn {
-    padding: 11px 24px; border-radius: 10px; border: none;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all .2s;
-  }
-  .btn-primary {
-    background: var(--navy); color: white;
-    box-shadow: 0 4px 12px rgba(26,58,92,0.3);
-  }
-  .btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); }
-  .btn-teal { background: var(--teal); color: white; box-shadow: 0 4px 12px rgba(42,181,160,0.3); }
-  .btn-teal:hover { background: var(--teal-light); transform: translateY(-1px); }
-  .btn-outline { background: white; color: var(--navy); border: 1.5px solid var(--border); }
-  .btn-outline:hover { border-color: var(--navy); }
-  .btn-copy {
-    padding: 8px 16px; border-radius: 8px; border: none;
-    font-size: 11px; font-weight: 700; cursor: pointer;
-    font-family: inherit; transition: all .2s;
-    background: var(--navy); color: white; white-space: nowrap;
-  }
-  .btn-copy:hover { background: var(--navy-mid); }
-  .btn-copy.copied { background: var(--teal); }
-
-  /* ── Print ── */
-  .print-btn {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--navy); color: white;
-    border: none; border-radius: 50%; width: 52px; height: 52px;
-    font-size: 20px; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(26,58,92,0.35);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform .2s;
-  }
-  .print-btn:hover { transform: scale(1.1); }
-
-  /* ── 최종 계획서 ── */
-  .plan-section {
-    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
-    border-radius: 16px; padding: 20px; margin-bottom: 16px; color: white;
-  }
-  .plan-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; color: white; }
-  .plan-field-group { margin-bottom: 12px; }
-  .plan-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); margin-bottom: 5px; display: block; }
-  .plan-textarea {
-    width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
-    padding: 9px 12px; font-size: 12px; font-family: inherit;
-    color: white; resize: vertical; outline: none; background: rgba(255,255,255,0.1);
-    line-height: 1.6; min-height: 64px;
-    transition: border-color .2s;
-  }
-  .plan-textarea::placeholder { color: rgba(255,255,255,0.4); }
-  .plan-textarea:focus { border-color: rgba(255,255,255,0.5); }
-  .plan-input {
-    width: 100%; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
-    padding: 9px 12px; font-size: 13px; font-family: inherit;
-    color: white; outline: none; background: rgba(255,255,255,0.1);
-    transition: border-color .2s;
-  }
-  .plan-input::placeholder { color: rgba(255,255,255,0.4); }
-  .plan-input:focus { border-color: rgba(255,255,255,0.5); }
-
-  /* ── 서명란 ── */
-  .print-sign {
-    display: flex; justify-content: flex-end; gap: 30px;
-    margin-top: 20px; padding-top: 12px;
-    border-top: 1px solid var(--border);
-  }
-  .sign-box { text-align: center; font-size: 11px; color: var(--muted); }
-  .sign-line { width: 80px; border-bottom: 1px solid #333; margin: 20px auto 4px; }
-
-  /* ── 필수/선택 배지 ── */
-  .req-badge{font-size:10px;font-weight:700;color:white;background:var(--coral);border-radius:4px;padding:1px 6px;margin-left:4px;}
-  .opt-badge{font-size:10px;font-weight:700;color:var(--muted);background:#eef0f6;border-radius:4px;padding:1px 6px;margin-left:4px;}
-
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 84px; right: 24px;
-    background: var(--navy); color: white;
-    padding: 10px 18px; border-radius: 10px;
-    font-size: 13px; font-weight: 600;
-    opacity: 0; transform: translateY(10px);
-    transition: all .3s; pointer-events: none;
-    z-index: 999;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 600px) {
-    .tendency-grid { gap: 6px; }
-    .ai-links { flex-direction: column; }
-    .step-label { font-size: 9px; }
-    .star { width: 24px; height: 24px; font-size: 11px; }
-    .score-row { grid-template-columns: 1fr; }
-    .star-rating { flex-wrap: wrap; }
-  }
-</style>
+    /* ── 모바일 ── */
+    @media (max-width: 480px) {
+      main { padding: 32px 16px 60px; }
+      .step-card { padding: 18px 18px 18px 22px; gap: 14px; }
+      .step-num { width: 38px; height: 38px; font-size: 15px; border-radius: 12px; }
+      .step-title { font-size: 15px; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="school-badge">🌱 <span>2학년 진로연계 탐구 설계 프로그램 · v1</span></div>
-    <h1>나의 1학년 기록에서 찾는 <em>2학년 탐구 로드맵</em></h1>
-    <p>학생부 기반 2학년 진로연계 탐구 설계기 · 1학년 기록 → AI 협업 → 2학년 탐구계획 확정 → 3학년 확장 방향</p>
-
-    <a href="manual.html" target="_blank" rel="noopener"
-       style="display:inline-block;margin-top:14px;padding:8px 16px;border-radius:20px;
-              background:rgba(255,255,255,0.14);color:white;text-decoration:none;
-              font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,0.25);">
-      📘 사용 매뉴얼 보기
-    </a>
-  </div>
-</header>
-
-<!-- Student Info -->
-<div id="studentView">
-<div style="background:white; border-bottom:1px solid var(--border);">
-  <div class="info-bar">
-    <div class="info-field"><label>학번</label><input id="stuId" placeholder="예) 20101" class="wide" /></div>
-    <div class="info-field"><label>이름</label><input id="stuName" placeholder="홍길동" /></div>
-    <div class="info-field"><label>작성일</label><input id="stuDate" type="date" style="width:140px;" /></div>
-  </div>
-</div>
-
-<!-- Step Nav -->
-<div style="background:white; border-bottom:1px solid var(--border);">
-  <div class="steps-nav" id="stepsNav">
-    <button class="step-btn active" onclick="goStep(0)">
-      <div class="step-num"><span>1</span></div>
-      <div class="step-label">학생부<br>기록 정리</div>
-    </button>
-    <div class="step-connector" id="conn0"></div>
-    <button class="step-btn" onclick="goStep(1)">
-      <div class="step-num"><span>2</span></div>
-      <div class="step-label">탐구 흐름<br>분석</div>
-    </button>
-    <div class="step-connector" id="conn1"></div>
-    <button class="step-btn" onclick="goStep(2)">
-      <div class="step-num"><span>3</span></div>
-      <div class="step-label">AI 프롬프트<br>생성</div>
-    </button>
-    <div class="step-connector" id="conn2"></div>
-    <button class="step-btn" onclick="goStep(3)">
-      <div class="step-num"><span>4</span></div>
-      <div class="step-label">주제 확정<br>&amp; 계획서</div>
-    </button>
-  </div>
-</div>
-
-<main>
-
-<!-- ────────────────── STEP 1: 학생부 기록 정리 ────────────────── -->
-<div class="panel active" id="panel0">
-  <div class="section-header">
-    <div class="step-badge">1단계</div>
-    <div class="section-title">
-      <h2>학생부 기록 정리 — 탐구 씨앗 찾기</h2>
-      <p>1학년 학생부를 펼쳐놓고, 2학년에서 더 탐구하고 싶은 내용을 중심으로 요약하세요.</p>
+  <header>
+    <div class="header-icon">🎓</div>
+    <div class="header-text">
+      <div class="header-title">창원경일고등학교</div>
+      <div class="header-sub">진로연계 탐구성장 플랫폼</div>
     </div>
-  </div>
+  </header>
 
-  <div class="warn-box">
-    <strong>⚠️ 입력 원칙</strong><br>
-    생기부 문장을 전체 복사·붙여넣기하지 마세요. <strong>핵심 활동·키워드·배운 점 중심으로 요약</strong>해 입력하세요.<br>
-    이름·학번·학교명 등 개인정보는 이 앱에서 저장되지 않습니다.
-  </div>
+  <main>
+    <div class="hero">
+      <div class="school-badge">
+        <span>✦</span> 창원경일고 진로연계 탐구활동
+      </div>
+      <h1>나만의 탐구를<br><em>설계하고 기록</em>하세요</h1>
+      <p class="hero-desc">아래 두 단계를 순서대로 진행하면<br>탐구 설계부터 기록까지 완성할 수 있어요.</p>
+    </div>
 
-  <!-- 최소 입력 기준 안내 -->
-  <div style="background:rgba(42,181,160,0.07);border:1.5px dashed var(--teal);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">
-    <span style="font-size:20px;flex-shrink:0;">⏱️</span>
-    <div>
-      <div style="font-size:12px;font-weight:700;color:#0d7a69;margin-bottom:6px;">시간이 부족하다면? — 최소 입력 기준</div>
-      <div style="font-size:12px;color:#0d6b5a;line-height:1.8;">
-        • <strong>각 칸에 한 문장</strong>만 입력해도 됩니다.<br>
-        • 최소한 <strong>1학년 기록 1개 + 현재 관심 분야 1개 + 반복 키워드 2개</strong>만 입력하면 다음 단계로 갈 수 있습니다.<br>
-        • 나머지는 나중에 수정해도 괜찮습니다. 포기하지 말고 일단 써보세요!
+    <div class="steps">
+
+      <a class="step-card" href="platform.html">
+        <div class="step-num-wrap">
+          <div class="step-num">01</div>
+          <div class="step-label">STEP 1</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">탐구 설계 시작하기</div>
+          <div class="step-desc">진로 목표와 교과 개념을 연결해<br>나만의 탐구 주제와 계획을 만들어요.</div>
+          <div class="step-tags">
+            <span class="tag">🎯 진로 연계</span>
+            <span class="tag">📐 주제 설계</span>
+            <span class="tag">📝 계획서 작성</span>
+          </div>
+        </div>
+        <div class="step-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <div class="connector">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        1단계 완료 후 진행
+      </div>
+
+      <a class="step-card" href="record.html">
+        <div class="step-num-wrap">
+          <div class="step-num">02</div>
+          <div class="step-label">STEP 2</div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">탐구기록지 작성하기</div>
+          <div class="step-desc">탐구 과정을 단계별로 기록하고<br>결과와 성찰을 정리해 저장해요.</div>
+          <div class="step-tags">
+            <span class="tag">📚 590개 주제 DB</span>
+            <span class="tag">💾 자동 저장</span>
+            <span class="tag">📤 내보내기</span>
+          </div>
+        </div>
+        <div class="step-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="info-box">
+      <div class="info-icon">💡</div>
+      <div class="info-text">
+        <strong>처음 사용하시나요?</strong> 1단계에서 탐구 주제를 설계한 뒤,
+        2단계 탐구기록지에서 <strong>[설계 불러오기]</strong>를 누르면
+        입력한 내용이 자동으로 채워집니다.
       </div>
     </div>
-  </div>
-
-  <!-- 1학년 기록 -->
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:#4db8e8;"></div>1학년 핵심 기록</div>
-    <div class="tip-box">
-      💡 1학년 세특·창체·동아리·진로활동 중 <strong>기억에 남는 활동, 탐구했던 주제, 관심 가졌던 개념</strong>을 요약하세요.
-    </div>
-    <div class="field-group">
-      <label class="field-label">과목별 세특에서 기억나는 활동·탐구·개념 <span class="req-badge">필수</span></label>
-      <textarea class="field-textarea" id="grade1_seotok" rows="4" placeholder="예) 생명과학에서 유전자 발현 조절을 탐구하며 후성유전학에 관심이 생김&#10;수학에서 미적분 활용 보고서로 경제 성장 모델 분석&#10;사회문화에서 청소년 미디어 소비 패턴 설문조사 수행"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">창체(자율·동아리·진로·봉사) 활동 중 의미 있었던 것</label>
-      <textarea class="field-textarea" id="grade1_changche" rows="3" placeholder="예) 환경 동아리에서 학교 쓰레기 분리배출 캠페인 기획·운영&#10;진로활동으로 의학 관련 직업인 강의 참가"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">행동특성·종합의견에서 두드러진 나의 특성</label>
-      <textarea class="field-textarea sm" id="grade1_haengtong" rows="2" placeholder="예) 논리적 분석력이 뛰어나고 팀 활동에서 문제 해결 역할을 맡음"></textarea>
-    </div>
-  </div>
-
-  <!-- 2학년 현재 관심 -->
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--teal);"></div>2학년 현재 관심사 &amp; 수업 경험</div>
-    <div class="tip-box">
-      💡 2학년 학생부는 아직 완성되지 않았습니다. <strong>지금 수강 중인 수업에서 관심이 생긴 내용, 최근 인상 깊었던 활동·책·뉴스</strong>를 중심으로 적으세요.
-    </div>
-    <div class="field-group">
-      <label class="field-label">현재 수업(2학년 과목)에서 관심이 생긴 내용 <span class="req-badge">필수</span></label>
-      <textarea class="field-textarea" id="grade2_current" rows="4" placeholder="예) 화학에서 산화·환원 반응 배우며 배터리 원리에 관심이 생김&#10;문학 시간에 사회적 소수자 주제 작품을 분석하며 복지 정책에 대해 탐구하고 싶어짐&#10;경제에서 최저임금 관련 사례 토론을 통해 청소년 노동 문제에 관심"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">최근 읽은 책·기사·영상 중 탐구 아이디어를 준 것</label>
-      <textarea class="field-textarea sm" id="grade2_reading" rows="2" placeholder="예) 『총균쇠』를 읽고 환경과 문명 발전의 관계에 관심이 생김&#10;유튜브에서 AI 의료 진단 관련 영상을 보고 의공학 분야에 관심"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">현재 참여 중인 동아리·창체 활동에서 더 탐구하고 싶은 것</label>
-      <textarea class="field-textarea sm" id="grade2_activity" rows="2" placeholder="예) 과학 동아리에서 식물 성장 실험을 하다가 빛 파장과 광합성 효율의 관계를 더 깊이 알고 싶어짐&#10;사회참여 동아리에서 환경 캠페인을 하면서 실제 정책 분석까지 하고 싶었음"></textarea>
-    </div>
-  </div>
-
-  <!-- 탐구 씨앗 -->
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--gold);"></div>탐구 씨앗 — 반복·아쉬움·다시 이어가기</div>
-    <div class="field-group">
-      <label class="field-label">🔁 1학년 기록과 현재 관심사에서 반복되는 키워드 <span class="req-badge">필수</span></label>
-      <textarea class="field-textarea sm" id="repeat_keywords" rows="2" placeholder="예) 환경·기후 변화, 유전자·생명공학, 데이터 분석, 사회 불평등, AI·기술 윤리"></textarea>
-      <div class="field-hint">계속 반복되어 등장하는 주제나 개념이 바로 탐구의 씨앗입니다.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">😔 1학년에서 더 깊이 탐구하지 못해 아쉬웠던 활동</label>
-      <textarea class="field-textarea sm" id="regret_activity" rows="2" placeholder="예) 후성유전학을 더 깊이 공부하고 싶었지만 수업 시간이 부족했음&#10;캠페인 수준에서 끝났지만 실제 정책 분석까지 해보고 싶었음"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">💬 학생부에서 2학년 탐구로 다시 이어가고 싶은 문장이나 표현</label>
-      <textarea class="field-textarea sm" id="reconnect_sentence" rows="2" placeholder="예) '기후 데이터와 질병 발생률의 상관관계에 관심을 보임'&#10;'유전자 치료의 윤리적 문제에 대해 심도 있는 논의를 원함'"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">❓ 지금 가장 궁금한 질문 (탐구 주제가 될 수 있는 질문)</label>
-      <textarea class="field-textarea sm" id="current_question" rows="2" placeholder="예) 도심 열섬 현상이 실제로 우리 지역 주민의 건강에 영향을 미치는가?&#10;SNS 알고리즘은 청소년의 정치적 의견 형성에 어떤 영향을 주는가?"></textarea>
-      <div class="field-hint">지금 풀고 싶은 질문이 탐구의 출발점입니다. 완성된 질문이 아니어도 됩니다.</div>
-    </div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="goStep(1)">다음 단계 →</button>
-  </div>
-</div>
-
-<!-- ────────────────── STEP 2: 탐구 흐름 분석 ────────────────── -->
-<div class="panel" id="panel1">
-  <div class="section-header">
-    <div class="step-badge">2단계</div>
-    <div class="section-title">
-      <h2>탐구 흐름 분석 — 2학년으로 이어지는 연결고리</h2>
-      <p>1단계에서 정리한 내용을 바탕으로 2학년 과목·진로·탐구 방식과 연결해 보세요.</p>
-    </div>
-  </div>
-
-  <div class="info-box">
-    💡 2학년 탐구는 1학년 활동을 단순 반복하는 것이 아니라,<br>
-    1학년 관심사를 <strong>더 구체적인 질문으로 좁히거나, 부족했던 부분을 보완하거나, 새로운 과목 개념과 연결</strong>하는 과정입니다.
-  </div>
-
-  <div class="emerald-box">
-    <strong>🌱 2학년 탐구의 장점</strong><br>
-    지금 이 탐구 계획을 잘 세워두면 3학년에서 "갑자기 만든 탐구"가 아닌 <strong>1학년 → 2학년 → 3학년으로 이어지는 성장 서사</strong>를 만들 수 있습니다!
-  </div>
-
-  <!-- 최소 입력 기준 안내 -->
-  <div style="background:rgba(42,181,160,0.07);border:1.5px dashed var(--teal);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">
-    <span style="font-size:20px;flex-shrink:0;">⏱️</span>
-    <div>
-      <div style="font-size:12px;font-weight:700;color:#0d7a69;margin-bottom:6px;">시간이 부족하다면? — 최소 입력 기준</div>
-      <div style="font-size:12px;color:#0d6b5a;line-height:1.8;">
-        • <strong>반복 관심사, 강점 과목, 희망 진로</strong> 이 세 가지만 채워도 다음 단계로 갈 수 있습니다.<br>
-        • 탐구 성향 칩은 <strong>1개</strong>만 선택해도 됩니다.<br>
-        • 빈 칸은 AI 프롬프트 생성 후 다듬어도 충분합니다.
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><div class="dot"></div>기록 분석 — 반복 관심사와 강점</div>
-    <div class="field-group">
-      <label class="field-label">🔁 내 기록에서 계속 반복되는 관심사·주제 (1단계 내용 참고) <span class="req-badge">필수</span></label>
-      <textarea class="field-textarea sm" id="repeat_interest" rows="2" placeholder="예) 기후 변화와 생태계, 데이터 분석을 통한 사회 문제 탐구"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">📚 내 강점이 가장 잘 드러난 과목</label>
-      <input class="field-input" id="strong_subject" placeholder="예) 생명과학, 수학, 사회·문화" />
-    </div>
-    <div class="field-group">
-      <label class="field-label">📖 2학년에서 이 탐구와 연결할 수 있는 현재 수강 과목</label>
-      <input class="field-input" id="linked_subject_2" placeholder="예) 화학I, 사회·문화, 경제, 생명과학I" />
-      <div class="field-hint">현재 2학년에서 배우고 있는 과목 중 탐구 주제와 연결 가능한 과목을 적으세요.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">🧠 탐구에 활용할 수 있는 관련 교과 개념</label>
-      <textarea class="field-textarea sm" id="subject_concept" rows="2" placeholder="예) 화학 반응 속도론(화학I), 사회 이동과 불평등(사회·문화), 수요·공급 탄력성(경제)"></textarea>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--lavender);"></div>진로 연결 및 탐구 성향</div>
-    <div class="field-group">
-      <label class="field-label">🧭 희망 진로 또는 관심 학과·전공 <span class="req-badge">필수</span></label>
-      <input class="field-input" id="career_goal" placeholder="예) 의생명공학과, 환경공학과, 사회학과, 교육학과" />
-    </div>
-    <div class="field-group">
-      <label class="field-label">🔬 나의 탐구 성향 (복수 선택 가능)</label>
-      <div class="tendency-grid" id="tendencyChips">
-        <div class="tendency-chip" onclick="toggleTendency(this,'문헌분석형')">📄 문헌분석형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'자료분석형')">📊 자료분석형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'실험형')">🧪 실험형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'설문조사형')">📋 설문조사형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'인터뷰형')">🎤 인터뷰형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'사례비교형')">🔄 사례비교형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'토론·비평형')">💬 토론·비평형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'제작·개발형')">🛠️ 제작·개발형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'캠페인·실천형')">📣 캠페인·실천형</div>
-        <div class="tendency-chip" onclick="toggleTendency(this,'융합탐구형')">🌐 융합탐구형</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--coral);"></div>기록의 빈틈과 구체화 방향</div>
-    <div class="field-group">
-      <label class="field-label">🕳️ 2학년에서 보완하면 좋은 기록의 빈틈</label>
-      <textarea class="field-textarea sm" id="record_gap" rows="2" placeholder="예) 1학년에서 캠페인·주장 수준에서 멈췄던 활동을 데이터·근거 기반으로 발전시켜야 함&#10;이론적 관심이 많았으나 직접 조사·측정 경험이 부족했음"></textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">🚀 1학년 관심사를 2학년에서 어떻게 구체화할 것인지</label>
-      <textarea class="field-textarea" id="deepening_direction" rows="3" placeholder="예) 기후 변화 캠페인 → 우리 지역 기온 데이터와 특정 질환 발생률의 상관관계 조사&#10;유전자 관심 → CRISPR 기술 관련 논문 읽기 + 윤리적 쟁점 보고서 작성"></textarea>
-      <div class="field-hint">1학년보다 한 단계 더 깊거나 구체적인 방향을 적어보세요.</div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">🔭 3학년에서 더 심화하고 싶은 방향 (선택)</label>
-      <textarea class="field-textarea sm" id="future_direction" rows="2" placeholder="예) 2학년에서 상관관계를 조사하고, 3학년에서는 원인 분석과 정책 대안까지 탐구하고 싶음&#10;2학년에서 윤리 쟁점을 정리하고, 3학년에서는 실제 임상 사례와 연결하고 싶음"></textarea>
-      <div class="field-hint">지금부터 3학년 흐름까지 생각하면 더욱 탄탄한 탐구 서사를 만들 수 있습니다.</div>
-    </div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-outline" onclick="goStep(0)">← 이전</button>
-    <button class="btn btn-primary" onclick="goStep(2)">다음 단계 →</button>
-  </div>
-</div>
-
-<!-- ────────────────── STEP 3: AI 프롬프트 생성 ────────────────── -->
-<div class="panel" id="panel2">
-  <div class="section-header">
-    <div class="step-badge">3단계</div>
-    <div class="section-title">
-      <h2>AI 프롬프트 생성 — AI와 협업하기</h2>
-      <p>아래 프롬프트를 복사해서 ChatGPT 또는 Claude에 붙여넣으세요. 순서대로 사용하면 더 좋은 결과를 얻을 수 있습니다.</p>
-    </div>
-  </div>
-
-  <div class="warn-box">
-    <strong>⚠️ 개인정보 입력 금지</strong><br>
-    ChatGPT·Claude 등 외부 AI에 입력할 때는 <strong>이름·학번·학교명·주소·연락처·가족 정보 등 개인정보를 입력하지 마세요.</strong><br>
-    생기부 전체 문장 붙여넣기보다 핵심 활동·키워드 위주로 요약한 내용만 사용하세요.
-  </div>
-
-  <div class="info-box">
-    <strong>💡 AI 결과 활용 안내</strong><br>
-    AI가 제안한 탐구 주제는 <strong>초안</strong>입니다. 최종 주제는 자신의 실제 경험·수강 과목·학교 여건·수행 가능성을 기준으로 반드시 수정해야 합니다.
-  </div>
-
-  <div class="info-box" style="background:rgba(77,184,232,0.08); border-color:var(--sky); color:#1a5a7a;">
-    <strong>📋 사용 순서</strong><br>
-    ① 주제 추천 프롬프트 복사 → AI에 붙여넣기 → 주제 5개 받기<br>
-    ② 주제 검증 프롬프트 복사 → AI 결과 붙여넣어 검증 → 수정 방향 파악<br>
-    ③ 계획서 구체화 프롬프트 복사 → 선택한 주제로 탐구계획서 생성
-  </div>
-
-  <!-- 프롬프트 ① -->
-  <div class="prompt-card">
-    <div class="prompt-card-header">
-      <div class="prompt-card-title">
-        <div class="prompt-num">①</div>
-        주제 추천 프롬프트
-      </div>
-      <button class="btn-copy" id="copyBtn1" onclick="copyPrompt(1)">📋 복사</button>
-    </div>
-    <div class="prompt-card-body">
-      <div class="prompt-desc">내 1학년 기록과 2학년 현재 관심사를 바탕으로 탐구 전개 10단계 흐름·독서 연계를 포함한 2학년 진로연계 탐구 주제 후보 5개를 생성합니다.</div>
-      <div class="prompt-box" id="promptBox1">프롬프트를 불러오는 중...</div>
-    </div>
-  </div>
-
-  <!-- 프롬프트 ② -->
-  <div class="prompt-card">
-    <div class="prompt-card-header">
-      <div class="prompt-card-title">
-        <div class="prompt-num">②</div>
-        주제 검증 프롬프트
-      </div>
-      <button class="btn-copy" id="copyBtn2" onclick="copyPrompt(2)">📋 복사</button>
-    </div>
-    <div class="prompt-card-body">
-      <div class="prompt-desc">AI가 추천한 주제를 8가지 기준(연계성·구체화성·교과성·실행가능성·진로적합성·독서연계·기록가능성·차별성)으로 검증합니다. ①의 결과를 받은 후 사용하세요.</div>
-      <div style="margin-bottom:10px;">
-        <label class="field-label" style="font-size:11px;">AI가 ①에서 제안한 주제 후보를 여기에 붙여넣으세요</label>
-        <textarea class="field-textarea sm" id="aiResult1" rows="3" placeholder="ChatGPT/Claude가 제안한 주제 목록을 여기에 붙여넣으세요..." oninput="renderPrompt2()"></textarea>
-      </div>
-      <div class="prompt-box" id="promptBox2">위 입력 후 자동 생성됩니다...</div>
-    </div>
-  </div>
-
-  <!-- 프롬프트 ③ -->
-  <div class="prompt-card">
-    <div class="prompt-card-header">
-      <div class="prompt-card-title">
-        <div class="prompt-num">③</div>
-        탐구계획서 구체화 프롬프트
-      </div>
-      <button class="btn-copy" id="copyBtn3" onclick="copyPrompt(3)">📋 복사</button>
-    </div>
-    <div class="prompt-card-body">
-      <div class="prompt-desc">선택한 주제를 독서 연계·교내 활용·자기성장·3학년 확장 방향까지 포함한 12항목 탐구계획서로 구체화합니다.</div>
-      <div style="margin-bottom:10px;">
-        <label class="field-label" style="font-size:11px;">최종 선택할 주제명을 입력하세요</label>
-        <input class="field-input" id="finalTopicDraft" placeholder="예) 우리 지역 미세먼지 농도와 중학생 호흡기 증상의 상관관계 분석" oninput="renderPrompt3()" style="margin-bottom:8px;" />
-        <label class="field-label" style="font-size:11px;">이 주제를 선택한 이유</label>
-        <textarea class="field-textarea sm" id="topicReason" rows="2" placeholder="예) 1학년 환경 캠페인 경험과 2학년 현재 통계 수업 내용이 자연스럽게 이어지며, 의생명 분야 진로와도 연결됩니다." oninput="renderPrompt3()"></textarea>
-      </div>
-      <div class="prompt-box" id="promptBox3">위 입력 후 자동 생성됩니다...</div>
-    </div>
-  </div>
-
-  <!-- AI 이동 버튼 -->
-  <div class="card" style="padding:16px 20px;">
-    <div class="card-title" style="margin-bottom:10px;"><div class="dot" style="background:var(--sky);"></div>AI 사이트 바로가기</div>
-    <div class="ai-links">
-      <a href="https://chat.openai.com" target="_blank" class="ai-link-btn ai-link-gpt">🤖 ChatGPT 열기</a>
-      <a href="https://claude.ai" target="_blank" class="ai-link-btn ai-link-claude">🧠 Claude 열기</a>
-    </div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-outline" onclick="goStep(1)">← 이전</button>
-    <button class="btn btn-primary" onclick="goStep(3)">주제 확정하기 →</button>
-  </div>
-</div>
-
-<!-- ────────────────── STEP 4: 주제 확정 & 탐구계획서 ────────────────── -->
-<div class="panel" id="panel3">
-  <div class="section-header">
-    <div class="step-badge">4단계</div>
-    <div class="section-title">
-      <h2>주제 확정 &amp; 탐구계획서 완성</h2>
-      <p>AI가 제안한 주제를 직접 평가하고, 최종 2학년 탐구계획서를 작성합니다.</p>
-    </div>
-  </div>
-
-  <div class="warn-box">
-    <strong>⚠️ 중요</strong> AI가 제안한 주제를 그대로 사용하지 마세요. 자신의 실제 경험·수강 과목·학교 여건에 맞게 <strong>반드시 수정·보완</strong>해야 합니다.
-  </div>
-
-  <!-- 최소 입력 기준 안내 -->
-  <div style="background:rgba(42,181,160,0.07);border:1.5px dashed var(--teal);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">
-    <span style="font-size:20px;flex-shrink:0;">⏱️</span>
-    <div>
-      <div style="font-size:12px;font-weight:700;color:#0d7a69;margin-bottom:6px;">시간이 부족하다면? — 최소 입력 기준</div>
-      <div style="font-size:12px;color:#0d6b5a;line-height:1.8;">
-        • <strong>후보 주제 1개 + 별점 평가</strong>만 해도 됩니다. 나머지 2개는 선택 사항입니다.<br>
-        • 탐구계획서는 <strong>탐구 동기, 핵심 탐구 질문, 탐구 방법</strong> 세 항목만 채워도 제출이 가능합니다.<br>
-        • 계획서 나머지 항목은 선생님과 상담 후 추가해도 됩니다.
-      </div>
-    </div>
-  </div>
-
-  <!-- A. AI 결과 검토 -->
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--sky);"></div>A. AI 주제 후보 검토</div>
-    <div class="field-group">
-      <label class="field-label">AI가 제안한 전체 내용 (참고용)</label>
-      <textarea class="field-textarea" id="aiFullResult" rows="4" placeholder="ChatGPT/Claude의 주제 추천 결과를 여기에 붙여넣으세요 (참고용으로만 사용)"></textarea>
-    </div>
-
-    <div style="margin-top:4px; margin-bottom:16px; font-size:12px; font-weight:700; color:var(--navy);">후보 주제 입력 및 평가 (최대 3개)</div>
-
-    <!-- 후보 1 -->
-    <div class="candidate-card" id="cand1">
-      <div class="candidate-header">
-        <div class="candidate-num">후보 1</div>
-        <input class="candidate-input" id="cand1_topic" placeholder="AI가 제안한 주제명을 입력하세요" />
-      </div>
-      <div id="cand1_scores"></div>
-    </div>
-
-    <!-- 후보 2 -->
-    <div class="candidate-card" id="cand2">
-      <div class="candidate-header">
-        <div class="candidate-num">후보 2</div>
-        <input class="candidate-input" id="cand2_topic" placeholder="AI가 제안한 주제명을 입력하세요" />
-      </div>
-      <div id="cand2_scores"></div>
-    </div>
-
-    <!-- 후보 3 -->
-    <div class="candidate-card" id="cand3">
-      <div class="candidate-header">
-        <div class="candidate-num">후보 3</div>
-        <input class="candidate-input" id="cand3_topic" placeholder="AI가 제안한 주제명을 입력하세요" />
-      </div>
-      <div id="cand3_scores"></div>
-    </div>
-
-    <div class="field-group" style="margin-top:16px;">
-      <label class="field-label">✅ 최종 선택 주제</label>
-      <input class="field-input" id="final_topic" placeholder="위 후보 중 선택하거나 직접 수정한 주제명" />
-    </div>
-    <div class="field-group">
-      <label class="field-label">이 주제를 선택한 이유</label>
-      <textarea class="field-textarea sm" id="final_reason" rows="2" placeholder="예) 1학년부터 지속적으로 관심 가졌던 환경 문제를 데이터 분석 방법으로 구체화하며, 2학년 통계 교과 개념과 연결됩니다."></textarea>
-    </div>
-  </div>
-
-  <!-- B. 최종 탐구계획서 -->
-  <div class="plan-section">
-    <h3>📋 2학년 탐구계획서</h3>
-
-    <div class="plan-field-group">
-      <label class="plan-label">탐구 동기</label>
-      <textarea class="plan-textarea" id="plan_motive" placeholder="왜 이 주제를 탐구하려 하는지, 1학년 어떤 경험에서 출발했는지"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">1학년 기록과의 연계성</label>
-      <textarea class="plan-textarea" id="plan_connection" placeholder="어떤 1학년 생기부 기록에서 이 주제가 출발했는지 구체적으로"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">2학년 교과 개념과의 연결</label>
-      <textarea class="plan-textarea" id="plan_concept" placeholder="예) 사회·문화 — 사회 불평등 지표, 화학I — 산화·환원 반응, 경제 — 수요·공급 탄력성"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">구체화·발전되는 지점 (1학년 대비 무엇이 달라지는가)</label>
-      <textarea class="plan-textarea" id="plan_deepening" placeholder="예) 1학년에서 캠페인 수준에 머물렀다면, 2학년에서는 실제 데이터를 수집하고 통계적으로 분석하는 수준으로 발전"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">핵심 탐구 질문 (1~2개)</label>
-      <textarea class="plan-textarea" id="plan_question" placeholder="예) Q1. 우리 지역 미세먼지 농도는 학생 건강(호흡기 증상)과 통계적으로 유의미한 관계가 있는가?&#10;Q2. 계절별·지역별로 그 관계는 어떻게 달라지는가?"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">탐구 방법</label>
-      <textarea class="plan-textarea" id="plan_method" placeholder="예) 공공데이터 수집 + 설문조사 + 문헌 비교 분석 + 결과 보고서 작성"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">자료 수집 계획</label>
-      <textarea class="plan-textarea" id="plan_data" placeholder="예) 환경부 에어코리아 PM2.5 데이터, 건강보험공단 지역별 호흡기 질환 통계, 교내 학생 설문(30명)"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">독서 또는 기사 연계</label>
-      <textarea class="plan-textarea" id="plan_reading" placeholder="예) 『침묵의 봄』(레이첼 카슨) — 환경 오염과 생태계의 관계를 이해하는 데 활용&#10;환경부 미세먼지 정책 보고서 — 국내 현황 파악"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">실행 일정 (3~5주)</label>
-      <textarea class="plan-textarea" id="plan_schedule" placeholder="1주차: 탐구 계획 수립 + 자료 수집 + 독서 시작&#10;2주차: 배경 조사 + 데이터 정리&#10;3주차: 분석 및 결과 해석&#10;4주차: 보고서 작성 및 발표 자료 제작&#10;5주차: 교내 발표 또는 전시"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">예상 산출물</label>
-      <textarea class="plan-textarea" id="plan_output" placeholder="예) 탐구 보고서(A4 4~6쪽), 발표 PPT, 통계 분석 결과표, 포스터"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">교내 발표·전시·동아리 활용 방안</label>
-      <textarea class="plan-textarea" id="plan_school_use" placeholder="예) 과학 탐구 발표회 참가, 도서관 포스터 전시, 동아리 보고서 공유, 학생회 정책 제안서 제출"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">3학년에서 더 심화할 수 있는 방향</label>
-      <textarea class="plan-textarea" id="plan_future" placeholder="예) 2학년에서 상관관계를 분석했다면, 3학년에서는 원인 분석과 정책 대안까지 연구하거나 전문 논문을 읽으며 학문적으로 발전시킬 수 있음"></textarea>
-    </div>
-    <div class="plan-field-group">
-      <label class="plan-label">세특 기록 포인트 (교사가 기록할 수 있는 활동 장면)</label>
-      <textarea class="plan-textarea" id="plan_seotok_point" placeholder="예) 공공 데이터를 직접 수집·분석하여 환경 문제를 정량적으로 탐구하는 과정에서 데이터 리터러시 능력을 발휘함"></textarea>
-    </div>
-  </div>
-
-  <!-- 교사 피드백 -->
-  <div class="card">
-    <div class="card-title"><div class="dot" style="background:var(--lavender);"></div>교사 피드백 메모 (선택)</div>
-    <textarea class="field-textarea" id="teacherFeedback" rows="3" placeholder="담당 선생님의 피드백이나 수정 사항을 기록해 두세요."></textarea>
-  </div>
-
-  <!-- 서명란 (인쇄 시만 표시) -->
-  <div class="print-sign" id="signArea" style="display:none;">
-    <div class="sign-box"><div class="sign-line"></div>학생 서명</div>
-    <div class="sign-box"><div class="sign-line"></div>교사 확인</div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-outline" onclick="goStep(2)">← 이전</button>
-    <button class="btn btn-teal" onclick="saveStudentData()">💾 제출 &amp; 저장</button>
-    <button class="btn btn-outline" onclick="printAll()">🖨️ 출력</button>
-  </div>
-</div>
-
-</main>
-</div><!-- /studentView -->
-
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<button class="print-btn" onclick="printAll()" title="인쇄">🖨️</button>
-
-<script>
-// ══════════════════════════════════════
-// STATE
-// ══════════════════════════════════════
-const state = {
-  currentStep: 0,
-  tendencies: [],
-  scores: { cand1: {}, cand2: {}, cand3: {} }
-};
-
-const SCORE_CRITERIA = [
-  { key: 'link',    label: '연계성',      hint: '💬 내 1학년 활동·관심사와 이어지는가?' },
-  { key: 'concrete',label: '구체화성',    hint: '💬 1학년보다 더 구체적·발전된 탐구인가?' },
-  { key: 'subject', label: '교과성',      hint: '💬 2학년 수강 과목 개념이 들어가는가?' },
-  { key: 'doable',  label: '실행가능성',  hint: '💬 우리 학교에서 실제로 할 수 있는가?' },
-  { key: 'career',  label: '진로적합성',  hint: '💬 내 관심 학과·진로와 연결되는가?' },
-  { key: 'diff',    label: '차별성',      hint: '💬 너무 흔한 주제는 아닌가?' },
-  { key: 'record',  label: '기록가능성',  hint: '💬 선생님이 관찰하고 써줄 장면이 있는가?' },
-];
-
-// ══════════════════════════════════════
-// STEP NAVIGATION
-// ══════════════════════════════════════
-function goStep(n) {
-  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
-  document.querySelectorAll('.step-btn').forEach((b,i)=>{
-    b.classList.remove('active','done');
-    if(i<n) b.classList.add('done');
-    if(i===n) b.classList.add('active');
-  });
-  for(let i=0;i<3;i++){
-    const c=document.getElementById('conn'+i);
-    if(c) c.classList.toggle('done',i<n);
-  }
-  state.currentStep = n;
-  if(n===2) { renderAllPrompts(); }
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ══════════════════════════════════════
-// TENDENCY CHIPS
-// ══════════════════════════════════════
-function toggleTendency(el, name) {
-  el.classList.toggle('selected');
-  const idx = state.tendencies.indexOf(name);
-  if(idx>-1) state.tendencies.splice(idx,1);
-  else state.tendencies.push(name);
-}
-
-// ══════════════════════════════════════
-// SCORE STARS
-// ══════════════════════════════════════
-function buildScoreRows(candKey) {
-  const el = document.getElementById(candKey + '_scores');
-  if(!el) return;
-  state.scores[candKey] = {};
-  el.innerHTML = '<div style="display:flex;flex-direction:column;gap:2px;margin-top:6px;">'
-    + SCORE_CRITERIA.map(c => `
-    <div class="score-row">
-      <div>
-        <div class="score-label">${c.label}</div>
-        <div class="score-hint">${c.hint}</div>
-      </div>
-      <div class="star-rating" id="${candKey}_${c.key}">
-        ${[1,2,3,4,5].map(v=>`<div class="star" data-v="${v}" onclick="setStar('${candKey}','${c.key}',${v})">${v}</div>`).join('')}
-      </div>
-    </div>`).join('')
-    + '</div>';
-}
-
-function setStar(cand, key, val) {
-  state.scores[cand][key] = val;
-  const stars = document.querySelectorAll(`#${cand}_${key} .star`);
-  stars.forEach(s => s.classList.toggle('on', +s.dataset.v <= val));
-}
-
-function getScoreTotal(cand) {
-  return Object.values(state.scores[cand] || {}).reduce((a,b)=>a+b,0);
-}
-
-function getScoreSummary(cand) {
-  const s = state.scores[cand] || {};
-  if(!Object.keys(s).length) return '(평가 없음)';
-  const total = Object.values(s).reduce((a,b)=>a+b,0);
-  const max = Object.keys(s).length * 5;
-  return SCORE_CRITERIA.filter(c=>s[c.key]).map(c=>`${c.label}:${s[c.key]}점`).join(' / ') + ` (합계 ${total}/${max})`;
-}
-
-// ══════════════════════════════════════
-// PROMPT GENERATION
-// ══════════════════════════════════════
-function getVal(id) {
-  const el = document.getElementById(id);
-  if(!el) return '(미입력)';
-  return el.value.trim() || '(미입력)';
-}
-
-function renderAllPrompts() {
-  renderPrompt1();
-  renderPrompt2();
-  renderPrompt3();
-}
-
-function renderPrompt1() {
-  const el = document.getElementById('promptBox1');
-  if(!el) return;
-  const p = `나는 고등학교 2학년 학생입니다.
-아래는 나의 1학년 학교생활기록부 주요 기록과 2학년 현재 관심사를 요약한 것입니다.
-
-━━━━━━━━━━━━━━━━━━
-[1학년 주요 기록]
-━━━━━━━━━━━━━━━━━━
-- 과목 세특: ${getVal('grade1_seotok')}
-- 창체 활동: ${getVal('grade1_changche')}
-- 행동특성 및 종합의견: ${getVal('grade1_haengtong')}
-
-━━━━━━━━━━━━━━━━━━
-[2학년 현재 관심사]
-━━━━━━━━━━━━━━━━━━
-- 현재 수업에서 관심 생긴 내용: ${getVal('grade2_current')}
-- 최근 읽은 책·기사·영상: ${getVal('grade2_reading')}
-- 동아리·창체에서 더 탐구하고 싶은 것: ${getVal('grade2_activity')}
-- 지금 가장 궁금한 질문: ${getVal('current_question')}
-
-━━━━━━━━━━━━━━━━━━
-[탐구 씨앗 정보]
-━━━━━━━━━━━━━━━━━━
-- 반복 키워드: ${getVal('repeat_keywords')}
-- 1학년에서 아쉬웠던 활동: ${getVal('regret_activity')}
-- 다시 이어가고 싶은 문장·표현: ${getVal('reconnect_sentence')}
-- 강점 교과: ${getVal('strong_subject')}
-- 2학년 연결 과목: ${getVal('linked_subject_2')}
-- 관련 교과 개념: ${getVal('subject_concept')}
-- 희망 진로 또는 관심 분야: ${getVal('career_goal')}
-- 탐구 성향: ${state.tendencies.length ? state.tendencies.join(', ') : '(미선택)'}
-- 기록의 빈틈(보완 필요한 부분): ${getVal('record_gap')}
-- 1학년 관심사를 2학년에서 구체화할 방향: ${getVal('deepening_direction')}
-- 3학년에서 더 심화하고 싶은 방향: ${getVal('future_direction')}
-
-━━━━━━━━━━━━━━━━━━
-[요청 사항]
-━━━━━━━━━━━━━━━━━━
-
-위 내용을 바탕으로 2학년 교과·진로 연계 탐구 주제 후보 5개를 제안해 주세요.
-
-▣ 반드시 지켜야 할 조건
-
-1. 일반적인 고등학생 수준에서 실제로 수행할 수 있어야 합니다.
-   - 특수 장비·전문 연구기관 방문 없이도 가능해야 합니다.
-   - 학교 도서관·인터넷·설문·관찰·인터뷰 등으로 자료 수집이 가능해야 합니다.
-   - 개인 또는 2인이 3~5주 내에 완료할 수 있는 규모여야 합니다.
-
-2. 1학년 기록에서 자연스럽게 이어져야 합니다.
-   (단순 반복이 아니라 관심사가 더 구체적·발전된 질문으로 발전해야 합니다.)
-
-3. 2학년 현재 수강 과목의 핵심 교과 개념을 탐구 도구로 활용해야 합니다.
-
-4. 독서를 탐구의 배경 근거로 적극 활용할 수 있어야 합니다.
-   - 각 주제마다 탐구 배경 조사 단계에서 읽으면 좋은 책(교양서·전공 입문서 수준) 1~2권을 구체적으로 추천해 주세요.
-   - 해당 책이 탐구와 어떻게 연결되는지 한 문장으로 설명해 주세요.
-
-5. 3학년에서 더 심화할 수 있는 방향을 제시해 주세요.
-   (2학년에서 기초를 만들고, 3학년에서 더 발전시킬 수 있는 구조여야 합니다.)
-
-▣ 각 주제마다 반드시 포함할 항목 (9가지)
-
-① 탐구 주제명
-   - 구체적이고 탐구 가능한 질문 형태 또는 제목 형태로 작성
-
-② 1학년 기록과의 연결 근거
-   - 어떤 1학년 활동·경험·관심사에서 출발했는지 설명
-
-③ 2학년에서 구체화·발전되는 지점
-   - 1학년 관심사와 비교해 무엇이 더 구체적으로 좁혀지거나 발전하는지
-
-④ 관련 교과 및 핵심 교과 개념
-   - 2학년 수강 과목 기준으로 어떤 개념을 탐구 도구로 쓰는지
-
-⑤ 핵심 탐구 질문
-   - "왜?", "어떻게?", "어떤 영향을?" 형태의 탐구형 질문 2개
-
-⑥ 고등학생 수준의 탐구 방법
-   - 아래 탐구 전개 흐름에 맞춰 단계별로 제시해 주세요:
-     1단계 — 문제의식 형성 (실생활·뉴스·1학년 경험에서 출발)
-     2단계 — 탐구 질문 구체화 (왜 중요한지, 어떤 영향이 있는지)
-     3단계 — 탐구 계획 수립 (자료 수집 방법, 변수 설정 등)
-     4단계 — 배경 조사 (교과 개념 정리, 독서, 통계·사례 수집)
-     5단계 — 핵심 활동 수행 (실험·설문·인터뷰·사례분석 등 고등학생이 실제로 할 수 있는 것)
-     6단계 — 교과 개념으로 분석 (배운 개념이나 사고 도구로 결과 해석)
-     7단계 — 결과 해석 및 자기 성찰 (시행착오, 한계, 느낀 점)
-     8단계 — 후속 활동 기획 (포스터·발표·제안서·캠페인 등 교내 활용 방식)
-     9단계 — 구체적 해결방안 또는 제언 제시
-    10단계 — 자기 성장 기술 + 3학년 심화 방향 제안
-
-⑦ 독서 연계
-   - 추천 도서 1~2권 (제목 + 저자 + 탐구와의 연결 설명 한 문장)
-
-⑧ 예상 산출물 및 교내 활용 방식
-   - 탐구 결과물 형태 (보고서·포스터·영상·제안서 등)
-   - 학교 안에서 실제로 적용 가능한 활용 방식 1가지 이상
-
-⑨ 추천도 및 이유
-   - ★ 1~5점으로 추천도를 표시하고, 이 주제를 추천하는 이유를 2문장 이내로 설명
-
-▣ 마지막에는 가장 추천하는 주제 1개를 선정하고,
-   아래 3가지를 포함하여 설명해 주세요:
-   - 왜 이 학생의 1학년 기록과 현재 관심사에 가장 잘 맞는지
-   - 진로 연결성이 가장 높은 이유
-   - 이 탐구를 2학년에 하면 3학년에서 어떻게 더 심화할 수 있는지`;
-  el.textContent = p;
-}
-
-function renderPrompt2() {
-  const el = document.getElementById('promptBox2');
-  if(!el) return;
-  const aiResult = (document.getElementById('aiResult1')?.value || '').trim() || '(①에서 받은 주제 목록을 위에 붙여넣으세요)';
-  const p = `아래는 AI가 추천한 2학년 진로연계 탐구 주제 후보입니다.
-
-━━━━━━━━━━━━━━━━━━
-[주제 후보]
-━━━━━━━━━━━━━━━━━━
-${aiResult}
-
-━━━━━━━━━━━━━━━━━━
-[나의 학생부 기록 요약]
-━━━━━━━━━━━━━━━━━━
-- 1학년 핵심 기록: ${getVal('grade1_seotok')}
-- 2학년 현재 관심사: ${getVal('grade2_current')}
-- 반복 키워드: ${getVal('repeat_keywords')}
-- 2학년 연결 과목: ${getVal('linked_subject_2')}
-- 관련 교과 개념: ${getVal('subject_concept')}
-- 희망 진로: ${getVal('career_goal')}
-- 탐구 성향: ${state.tendencies.length ? state.tendencies.join(', ') : '(미선택)'}
-- 기록의 빈틈: ${getVal('record_gap')}
-
-━━━━━━━━━━━━━━━━━━
-[검증 요청]
-━━━━━━━━━━━━━━━━━━
-
-위 주제 후보들이 나의 1학년 기록·2학년 현재 관심사와 잘 연결되는지 아래 8가지 기준으로 각각 평가해 주세요.
-
-▣ 평가 기준 (각 항목 상·중·하로 평가)
-
-① 1학년 기록과의 연계성
-   - 1학년 활동·관심사·개념과 자연스럽게 이어지는가?
-   - 기존 기록을 단순 반복하지 않고 발전시키고 있는가?
-
-② 1학년 대비 구체화·발전성
-   - 1학년보다 더 구체적인 질문으로 좁혀졌는가?
-   - "나는 1학년에 이걸 했으니 2학년에서는 이걸 더 구체적으로 파고든다"는 서사가 보이는가?
-
-③ 2학년 교과 개념과의 연결성
-   - 2학년 수강 과목의 핵심 개념이 탐구 도구로 실제 활용되는가?
-   - 교과 개념이 단순 언급에 그치지 않고 분석·해석에 쓰이는가?
-
-④ 고등학생 수준의 실행 가능성
-   - 특수 장비·전문 연구기관 없이도 수행 가능한가?
-   - 학교 도서관·인터넷·설문·인터뷰 등으로 자료 수집이 가능한가?
-   - 3~5주 내에 개인 또는 2인이 마무리할 수 있는 규모인가?
-
-⑤ 희망 진로와의 적합성
-   - 관심 학과·전공과 실질적으로 연결되는가?
-   - 이 탐구 경험이 학생의 진로 방향을 구체화하는 데 도움이 되는가?
-
-⑥ 독서 연계 가능성
-   - 탐구 배경 조사 단계에서 읽을 수 있는 책(교양서·전공 입문서 수준)이 존재하는가?
-   - 독서를 통해 탐구의 이론적 기반이나 문제의식이 강화될 수 있는가?
-
-⑦ 세특·창체 기록 가능성
-   - 교사가 관찰하고 기록할 수 있는 구체적인 활동 장면이 포함되어 있는가?
-   - 단순 조사·요약에 그치지 않고 학생의 사고 과정과 성장이 드러나는가?
-
-⑧ 차별성 (주제의 신선함)
-   - 너무 흔하거나 추상적인 주제는 아닌가?
-   - 이 학생만의 1학년 경험과 현재 관심사가 반영된 고유한 주제인가?
-
-━━━━━━━━━━━━━━━━━━
-[출력 형식]
-━━━━━━━━━━━━━━━━━━
-
-각 주제마다:
-- 8가지 기준별 평가 (상·중·하)
-- 가장 큰 강점 1가지
-- 보완이 필요한 부분과 구체적인 수정 방향
-- 수정된 주제명 또는 탐구 질문 제안 (필요한 경우)
-
-━━━━━━━━━━━━━━━━━━
-[최종 판단]
-━━━━━━━━━━━━━━━━━━
-
-각 주제에 대해 아래 중 하나로 결론을 내려 주세요:
-A. 이대로 진행 가능 — 이유 포함
-B. 수정 후 진행 권장 — 수정 방향 구체적으로 제시
-C. 다른 주제 선택 권장 — 이유 및 대안 방향 제시
-
-마지막에는 가장 높은 종합 점수의 주제 1개를 최종 추천하고,
-그 주제를 2학년 탐구계획서로 발전시킬 때 핵심적으로 강조할 포인트 2~3가지를 제시해 주세요.`;
-  el.textContent = p;
-}
-
-function renderPrompt3() {
-  const el = document.getElementById('promptBox3');
-  if(!el) return;
-  const topic = (document.getElementById('finalTopicDraft')?.value || '').trim() || '(선택한 주제명을 위에 입력하세요)';
-  const reason = (document.getElementById('topicReason')?.value || '').trim() || '(이유를 위에 입력하세요)';
-  const p = `나는 고등학교 2학년 학생입니다.
-아래 주제로 2학년 진로연계 탐구활동을 진행하려고 합니다.
-
-━━━━━━━━━━━━━━━━━━
-[최종 선택 주제]
-━━━━━━━━━━━━━━━━━━
-${topic}
-
-[이 주제를 선택한 이유]
-${reason}
-
-━━━━━━━━━━━━━━━━━━
-[나의 학생부 기록 요약]
-━━━━━━━━━━━━━━━━━━
-- 1학년 핵심 기록: ${getVal('grade1_seotok')}
-- 2학년 현재 관심사: ${getVal('grade2_current')}
-- 반복 키워드: ${getVal('repeat_keywords')}
-- 2학년 관련 과목: ${getVal('linked_subject_2')}
-- 관련 교과 개념: ${getVal('subject_concept')}
-- 희망 진로: ${getVal('career_goal')}
-- 탐구 성향: ${state.tendencies.length ? state.tendencies.join(', ') : '(미선택)'}
-- 구체화 방향: ${getVal('deepening_direction')}
-- 3학년 심화 방향: ${getVal('future_direction')}
-
-━━━━━━━━━━━━━━━━━━
-[탐구계획서 작성 요청]
-━━━━━━━━━━━━━━━━━━
-
-이 주제를 실제 학교 활동으로 수행할 수 있도록
-아래 12가지 항목을 포함한 2학년 탐구계획서를 작성해 주세요.
-
-▣ 중요 원칙
-- 모든 활동은 일반적인 고등학생이 학교 안에서 실제로 수행할 수 있는 수준이어야 합니다.
-- 특수 장비나 전문 연구기관 방문 없이도 가능한 방법을 제시해 주세요.
-- 독서를 탐구의 배경 근거로 적극 활용할 수 있도록 포함해 주세요.
-
-━━━━━━━━━━━━━━━━━━
-[항목별 작성 지침]
-━━━━━━━━━━━━━━━━━━
-
-1. 최종 탐구 주제
-   - 탐구 가능한 구체적인 질문 또는 제목 형태로 정리
-
-2. 탐구 동기
-   - 학생의 1학년 경험·관찰·뉴스·사회 현상 등에서 출발한 문제의식을 서술
-   - "이 문제가 왜 나에게 중요한가?"를 중심으로 작성
-
-3. 1학년 기록과의 연계성
-   - 어떤 1학년 활동에서 이 탐구가 시작되었는지
-   - 1학년 → 2학년으로 이어지는 관심의 흐름을 구체적으로 설명
-
-4. 구체화·발전되는 지점 (1학년 대비)
-   - 1학년 활동과 비교해 무엇이 더 구체적이고 발전되었는지
-   - "1학년에는 ○○ 수준이었다면, 2학년에서는 ○○까지 탐구한다"는 형식으로 서술
-
-5. 2학년 교과 개념 및 분석 도구
-   - 2학년 수강 과목에서 이 탐구에 활용할 핵심 개념 2~3가지
-   - 해당 개념이 탐구의 어떤 단계에서 어떻게 사용되는지 설명
-
-6. 핵심 탐구 질문 2개
-   - 탐구 전체를 이끌어 가는 핵심 질문 2개
-   - "왜?", "어떤 조건에서?", "어떤 영향이?" 형태의 탐구형 질문
-
-7. 탐구 방법 (고등학생 수준에서 실제로 가능한 방법)
-   - 자료 수집: 문헌·통계·사례·설문·인터뷰·관찰 중 해당되는 것
-   - 분석 방법: 비교분석·상관분석·사례연구·비판적 읽기 등
-   - 활동 수행: 실험·제작·발표·토론·제안서 작성 등 교내에서 가능한 것
-
-8. 자료 수집 계획
-   - 어떤 자료를 어디서 어떻게 수집할지 구체적으로
-   - 공공 데이터·도서관·설문 등 접근 가능한 방법 중심으로
-
-9. 독서 또는 기사 연계 계획
-   - 배경 조사 단계에서 읽을 책 1~2권 (제목 + 저자 + 탐구와의 연결 설명)
-   - 독서 후 할 수 있는 간단한 후속 활동 제안
-
-10. 예상 산출물 및 교내 발표·전시·동아리 활용 방안
-    - 탐구 결과물 형태 (보고서·포스터·발표자료·영상·제안서 등)
-    - 학교 안에서 실제로 활용 가능한 방식 1~2가지
-      (예: 교과 발표, 복도·도서관 포스터 전시, 학생회 제안서, 동아리 연계, 과학탐구 발표회 등)
-
-11. 3~5주 실행 계획 (주차별)
-    - 1주: 문제의식 형성 + 탐구 계획 수립 + 독서 시작
-    - 2주: 배경 조사 + 자료 수집 + 핵심 활동 수행
-    - 3주: 교과 개념으로 분석 + 결과 정리 + 산출물 제작
-    - 4주: 성찰 및 후속 활동 기획 + 교내 발표 또는 전시
-    - 5주: (선택) 보완·수정 및 교사 피드백 반영
-
-12. 교사가 관찰할 수 있는 세특 기록 포인트
-    - 교사 입장에서 관찰하고 기록할 수 있는 구체적인 활동 장면 3가지
-    - 단순 조사가 아닌 학생의 사고 과정·판단·성장이 드러나는 장면으로 작성
-    - 세특 기록 시 강조하면 좋을 역량이나 태도 제시
-
-━━━━━━━━━━━━━━━━━━
-[마지막에 추가 요청]
-━━━━━━━━━━━━━━━━━━
-
-이 탐구계획서를 바탕으로 아래 세 가지도 함께 작성해 주세요.
-
-A. 탐구 주제 한 줄 소개문 (발표·상담용, 2~3문장)
-   예: "저는 1학년부터 환경 문제에 관심을 가져왔고, 2학년에서는 ○○○○을 구체적으로 탐구합니다. 이를 통해 ○○ 분야 진로를 위한 ○○ 역량을 키우고자 합니다."
-
-B. 3학년에서 더 심화할 수 있는 방향
-   - 2학년 탐구를 기반으로 3학년에서 어떻게 발전시킬 수 있는지 2~3가지 방향 제시
-
-C. 이 탐구에서 주의해야 할 점 또는 한계
-   - 탐구 과정에서 생길 수 있는 어려움
-   - 고등학생 수준에서 다루기 어려운 부분과 그 대안`;
-  el.textContent = p;
-}
-
-// ══════════════════════════════════════
-// COPY PROMPT
-// ══════════════════════════════════════
-function copyPrompt(num) {
-  const text = document.getElementById('promptBox' + num)?.textContent || '';
-  if(!text || text.startsWith('프롬프트를') || text.startsWith('위 입력')) {
-    showToast('⚠️ 먼저 1·2단계 내용을 입력하세요.'); return;
-  }
-  const copyFn = () => {
-    const btn = document.getElementById('copyBtn' + num);
-    if(btn) { btn.textContent = '✅ 복사됨'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent='📋 복사'; btn.classList.remove('copied'); },2000); }
-    showToast('🚀 프롬프트가 복사되었습니다! AI 창에 붙여넣으세요.');
-  };
-  if(navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(copyFn).catch(()=>{
-      const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);copyFn();
-    });
-  } else {
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);copyFn();
-  }
-}
-
-// ══════════════════════════════════════
-// COLLECT & SAVE
-// ══════════════════════════════════════
-function collectStudentData() {
-  return {
-    id:   document.getElementById('stuId')?.value?.trim() || '미입력',
-    name: document.getElementById('stuName')?.value?.trim() || '이름없음',
-    date: document.getElementById('stuDate')?.value || '',
-    savedAt: new Date().toLocaleString('ko-KR'),
-    step: state.currentStep + 1,
-    // 1단계
-    grade1_seotok:       getVal('grade1_seotok'),
-    grade1_changche:     getVal('grade1_changche'),
-    grade1_haengtong:    getVal('grade1_haengtong'),
-    grade2_current:      getVal('grade2_current'),
-    grade2_reading:      getVal('grade2_reading'),
-    grade2_activity:     getVal('grade2_activity'),
-    repeat_keywords:     getVal('repeat_keywords'),
-    regret_activity:     getVal('regret_activity'),
-    reconnect_sentence:  getVal('reconnect_sentence'),
-    current_question:    getVal('current_question'),
-    // 2단계
-    repeat_interest:     getVal('repeat_interest'),
-    strong_subject:      getVal('strong_subject'),
-    linked_subject_2:    getVal('linked_subject_2'),
-    subject_concept:     getVal('subject_concept'),
-    career_goal:         getVal('career_goal'),
-    tendencies:          [...state.tendencies],
-    record_gap:          getVal('record_gap'),
-    deepening_direction: getVal('deepening_direction'),
-    future_direction:    getVal('future_direction'),
-    // 4단계
-    ai_full_result:      getVal('aiFullResult'),
-    cand1_topic:         getVal('cand1_topic'),
-    cand2_topic:         getVal('cand2_topic'),
-    cand3_topic:         getVal('cand3_topic'),
-    cand1_scores:        {...(state.scores.cand1||{})},
-    cand2_scores:        {...(state.scores.cand2||{})},
-    cand3_scores:        {...(state.scores.cand3||{})},
-    cand1_score_summary: getScoreSummary('cand1'),
-    cand2_score_summary: getScoreSummary('cand2'),
-    cand3_score_summary: getScoreSummary('cand3'),
-    final_topic:         getVal('final_topic'),
-    final_reason:        getVal('final_reason'),
-    // 계획서
-    plan_motive:         getVal('plan_motive'),
-    plan_connection:     getVal('plan_connection'),
-    plan_concept:        getVal('plan_concept'),
-    plan_deepening:      getVal('plan_deepening'),
-    plan_question:       getVal('plan_question'),
-    plan_method:         getVal('plan_method'),
-    plan_data:           getVal('plan_data'),
-    plan_reading:        getVal('plan_reading'),
-    plan_schedule:       getVal('plan_schedule'),
-    plan_output:         getVal('plan_output'),
-    plan_school_use:     getVal('plan_school_use'),
-    plan_future:         getVal('plan_future'),
-    plan_seotok_point:   getVal('plan_seotok_point'),
-    teacherFeedback:     getVal('teacherFeedback'),
-  };
-}
-
-function saveStudentData() {
-  const data = collectStudentData();
-  if(data.name==='이름없음' && data.id==='미입력') {
-    showToast('⚠️ 학번과 이름을 먼저 입력해 주세요.'); return;
-  }
-  showToast('✅ 작성이 완료되었습니다!');
-}
-
-// ══════════════════════════════════════
-// PRINT
-// ══════════════════════════════════════
-function printAll(){
-  const sign=document.getElementById('signArea');
-  if(sign) sign.style.display='flex';
-  window.print();
-  setTimeout(()=>{ if(sign) sign.style.display='none'; },500);
-}
-
-// ══════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
-  const dateEl = document.getElementById('stuDate');
-  if(dateEl) dateEl.valueAsDate = new Date();
-
-  buildScoreRows('cand1');
-  buildScoreRows('cand2');
-  buildScoreRows('cand3');
-});
-</script>
-
-<!-- 인쇄 스타일 -->
-<style>
-@media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  .print-btn, .btn-row, .steps-nav,
-  .prompt-card .btn-copy, .ai-links, #aiResult1, #finalTopicDraft,
-  #topicReason { display: none !important; }
-
-  @page { size: A4 portrait; margin: 15mm 14mm 15mm 14mm; }
-
-  html, body { width: 100%; font-size: 10pt; background: white !important; }
-
-  header {
-    background: linear-gradient(135deg, #1a3a5c 0%, #235080 100%) !important;
-    color: white !important; padding: 14px 20px !important;
-    border-radius: 0 !important; page-break-after: avoid;
-    -webkit-print-color-adjust: exact !important;
-  }
-  header h1, header p { color: white !important; }
-  header h1 em { color: #5dd3c0 !important; }
-  .school-badge { color: rgba(255,255,255,0.85) !important; }
-
-  .info-bar {
-    display: flex !important; flex-wrap: wrap; padding: 10px 20px !important;
-    border-bottom: 2px solid #1a3a5c !important; background: #f8faff !important;
-    page-break-after: avoid;
-  }
-
-  main { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
-
-  .panel { display: block !important; animation: none !important; opacity: 1 !important; transform: none !important; }
-
-  #panel0 { page-break-after: always; }
-  #panel1 { page-break-after: always; }
-  #panel2 { page-break-after: always; }
-  #panel3 { page-break-after: avoid; }
-
-  .section-header { page-break-after: avoid; }
-  .step-badge { background: #1a3a5c !important; color: white !important; border-radius: 20px !important; padding: 4px 12px !important; }
-
-  .card {
-    border: 1px solid #dde3f0 !important; border-radius: 8px !important;
-    padding: 12px !important; margin-bottom: 10px !important;
-    page-break-inside: avoid; background: white !important; box-shadow: none !important;
-  }
-
-  .warn-box, .info-box, .tip-box, .emerald-box { page-break-inside: avoid; }
-
-  .prompt-box {
-    max-height: none !important;
-    overflow: visible !important;
-    border: 1px solid #dde3f0 !important;
-    font-size: 9pt !important;
-    white-space: pre-wrap !important;
-    word-break: break-all !important;
-  }
-
-  .prompt-card { page-break-inside: avoid; }
-
-  .plan-section {
-    background: linear-gradient(135deg, #1a3a5c, #235080) !important;
-    color: white !important; border-radius: 12px !important;
-    padding: 14px 16px !important; page-break-inside: avoid;
-    -webkit-print-color-adjust: exact !important;
-  }
-  .plan-label { color: rgba(255,255,255,0.75) !important; }
-  .plan-textarea, .plan-input {
-    background: rgba(255,255,255,0.12) !important;
-    color: white !important; border: 1px solid rgba(255,255,255,0.3) !important;
-    overflow: visible !important; max-height: none !important;
-    resize: none !important;
-  }
-
-  .candidate-card { page-break-inside: avoid; }
-  .star.on {
-    background: #f5c842 !important;
-    border-color: #c89a00 !important;
-    color: #6b4c00 !important;
-  }
-
-  .print-sign { display: flex !important; }
-  #signArea { display: flex !important; }
-
-  .tendency-chip.selected {
-    background: #1a3a5c !important; color: white !important;
-    border-color: #1a3a5c !important;
-  }
-
-  textarea, input[type="text"], input[type="date"] {
-    border: 1px solid #dde3f0 !important;
-    background: #fafbff !important;
-    resize: none !important;
-    overflow: visible !important;
-    min-height: unset !important;
-    height: auto !important;
-  }
-
-  .info-box {
-    background: rgba(42,181,160,0.1) !important;
-    border-left: 3px solid #2ab5a0 !important;
-    color: #0d5040 !important;
-  }
-  .warn-box {
-    background: rgba(255,107,107,0.1) !important;
-    border-left: 3px solid #ff6b6b !important;
-    color: #7a1010 !important;
-  }
-  .tip-box {
-    background: rgba(245,200,66,0.15) !important;
-    border-left: 3px solid #f5c842 !important;
-    color: #6b4c00 !important;
-  }
-  .emerald-box {
-    background: rgba(34,197,94,0.1) !important;
-    border-left: 3px solid #22c55e !important;
-    color: #166534 !important;
-  }
-
-  .print-only-title {
-    display: block !important;
-    font-size: 14pt; font-weight: 700; color: #1a3a5c;
-    text-align: center; margin: 8px 0 16px;
-    border-bottom: 2px solid #1a3a5c; padding-bottom: 8px;
-  }
-}
-
-.print-only-title { display: none; }
-</style>
+  </main>
+
+  <footer>
+    창원경일고등학교 진로연계 탐구성장 플랫폼 &nbsp;·&nbsp; 학생 주도형 탐구활동 지원
+  </footer>
 
 </body>
 </html>
